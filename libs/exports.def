@@ -1,0 +1,9 @@
+LIBRARY api
+EXPORTS
+    add
+    capitalize
+    initApp
+    restartApp
+    getScreenBuffer
+    pushKey
+    whatThing

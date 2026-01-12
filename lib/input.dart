@@ -136,6 +136,7 @@ class _InputListener extends State<InputListener> {
                 child: Row(children: [
               IconButton(
                   icon:
+//                      Icon(Icons.keyboard, color: Colors.white, size: iconSize),
                       Icon(Icons.keyboard, size: iconSize),
                   onPressed: () {
                     setState(() {
@@ -148,6 +149,7 @@ class _InputListener extends State<InputListener> {
                     });
                   }),
               ...(widget.toolbar.map((t) => IconButton(
+//                    icon: Icon(t.icon, color: Colors.white, size: iconSize),
                     icon: Icon(t.icon, size: iconSize),
                     onPressed: () {
                       if (t.cmd.length > 0) {

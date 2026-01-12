@@ -26,7 +26,6 @@ void main() {
 
   runApp(app);
 }
-
 class Game extends StatelessWidget {
   const Game({Key? key}) : super(key: key);
 
@@ -35,7 +34,7 @@ class Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: darkMode,
+      theme: lightMode,
       darkTheme: darkMode,
       themeMode: Provider.of<ThemeProvider>(context).themeMode,
       home: const GameView(),
@@ -57,7 +56,7 @@ class GameMap extends StatelessWidget {
 
     // map
     Size size = SpriteSheet.instance().size;
-    //board.useSprites = true;
+    //board.useSprites = false;
     if (!board.useSprites) {
 	size = Size(12, 16);
     }
@@ -68,56 +67,17 @@ class GameMap extends StatelessWidget {
       size = Size(16, 16);
       playerXY = Offset(40 * size.width, 20 * size.height);
     }
-    /* no player visible, e.g. inventory, help, options screens) */
-    if (board.player.x == 0 && board.player.y == 0
-	&& board.buffer.length >= 3200) {
-
-      int first_row=-1, last_row=-1, first_col=-1, last_col=-1;
-      for (int i = 0; i < 25; i++) {
-	String line = board.getLine(i).trim();
-	if (line.contains(RegExp(r'[^ ]'))) {
-	  if (first_row < 0) {
-	    first_row = i;
-	  }
-	  last_row = i;
-	}
-      }
-      for (int i = 0; i < 80; i++) {
-	String col = board.getCol(i).trim();
-	if (col.contains(RegExp(r'[^ ]'))) {
-	  if (first_col < 0) {
-	    first_col = i;
-	  }
-	  last_col = i;
-	}
-      }
-
-      if (first_row > -1 && first_row <= last_row
-	  && first_col > -1 && first_col <= last_col) {
-	int playerX = (first_col + last_col) ~/ 2;
-	int playerY = (first_row + last_row) ~/ 2;
-	playerXY = Offset(playerX * size.width, playerY * size.height);
-//print("first row: $first_row");
-//print("last row: $last_row");
-//print("first col: $first_col");
-//print("last col: $last_col");
-      }
-    }
 
     Offset center =
         Offset(screen.width / 2 - playerXY.dx, screen.height / 2 - playerXY.dy);
 
     List<Widget> map = [];
     for (final c in board.cells) {
-//String match = "-_|+.";
-//if (!match.contains(c.data)) print(c.data); stdout.flush();
 	map.add(Positioned(
           top: center.dy + (size.height * (c.y - 2)),
           left: center.dx + (size.width * c.x),
-//          child: (board.useSprites? Sprite(cell: c):
-          child: (board.useSprites && (Sprite(cell: c) != null))?
-	  Sprite(cell: c):
-	  Text(c.data, style: TextStyle(fontSize: size.width))));
+          child: (board.useSprites? Sprite(cell: c):
+	  Text(c.data, style: TextStyle(fontSize: size.width)))));
     }
 
     return Stack(children: map);
@@ -155,7 +115,8 @@ class _GameViewState extends State<GameView> {
     TextStyle statStyle = TextStyle(
         // fontFamily: 'PixelFont',
         fontSize: fontSize,
-        fontWeight: FontWeight.bold);
+        fontWeight: FontWeight.bold,
+        /* color: Colors.black */);
     List<Widget> stats = [];
     for (final k in board.stats.keys) {
       String v = board.stats[k] ?? '';
@@ -168,7 +129,7 @@ class _GameViewState extends State<GameView> {
       ]));
     }
 
-    if (board.hasRip || !board.hasStats) {
+    if (board.hasRip) {
       stats = [];
     }
 
@@ -179,8 +140,8 @@ class _GameViewState extends State<GameView> {
       InputTool(icon: Icons.arrow_upward, title: 'Up', cmd: 'k'),
       InputTool(icon: Icons.arrow_forward, title: 'Right', cmd: 'l'),
       InputTool(icon: Icons.update, title: 'Rest', cmd: '.'),
-      InputTool(icon: Icons.keyboard_arrow_up, title: 'Up stairs', cmd: '<'),
-      InputTool(icon: Icons.keyboard_arrow_down, title: 'Down stairs', cmd: '>'),
+      InputTool(icon: Icons.keyboard_arrow_up, title: 'Space', cmd: '<'),
+      InputTool(icon: Icons.keyboard_arrow_down, title: 'Space', cmd: '>'),
       InputTool(icon: Icons.space_bar, title: 'Space', cmd: ' '),
       InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
     ];
@@ -199,7 +160,7 @@ class _GameViewState extends State<GameView> {
     }
 
     TextStyle messageStyle = const TextStyle(
-        fontSize: 18, fontStyle: FontStyle.italic);
+        fontSize: 18, fontStyle: FontStyle.italic, /* color: Colors.black */);
 
     return Scaffold(
         body: InputListener(
@@ -214,7 +175,7 @@ class _GameViewState extends State<GameView> {
         // map
         Expanded(child: GameMap()),
 
-        Text((board.hasStats)? board.message: "", style: messageStyle),
+        Text(board.message, style: messageStyle),
       ]),
       onKeyDown: (String key,
           {int keyId = 0,
@@ -235,26 +196,8 @@ class _GameViewState extends State<GameView> {
 	      key = String.fromCharCode(97 + k - LogicalKeyboardKey.keyA.keyId);
 	  }
         }
-	if (shift && k == LogicalKeyboardKey.digit1.keyId)
-	    key = '!';
-	if (shift && k == LogicalKeyboardKey.digit2.keyId)
-	    key = '@';
-	if (shift && k == LogicalKeyboardKey.digit3.keyId)
-	    key = '#';
-	if (shift && k == LogicalKeyboardKey.digit4.keyId)
-	    key = '\$';
-	if (shift && k == LogicalKeyboardKey.digit5.keyId)
-	    key = '%';
-	if (shift && k == LogicalKeyboardKey.digit6.keyId)
-	    key = '^';
-	if (shift && k == LogicalKeyboardKey.digit7.keyId)
-	    key = '&';
 	if (shift && k == LogicalKeyboardKey.digit8.keyId)
 	    key = '*';
-	if (shift && k == LogicalKeyboardKey.digit9.keyId)
-	    key = '(';
-	if (shift && k == LogicalKeyboardKey.digit0.keyId)
-	    key = ')';
 
         String s = key;
 
@@ -306,18 +249,16 @@ class _GameViewState extends State<GameView> {
             break;
         }
 
-	if (s == '!') {
+	if (s == '~') {
+	    //Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
 	    board.useSprites = !board.useSprites;
-/*
 	    if (board.useSprites) {
 	      Provider.of<ThemeProvider>(context, listen: false).darkTheme(context);
 	    } else {
 	      Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
 	    }
-*/
-	    s = '';
+	    s = ' ';
 	}
-
         if (s.length == 1) {
           FFIBridge.pushKey(s);
         }

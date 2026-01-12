@@ -57,8 +57,10 @@ OPTION	optlist[] = {
 	{&showcursor},	put_bool,	get_bool	},
     {"autopickup",	"Pick up things you step on (autopickup): ",
 	{&autopickup},	put_bool,	get_bool	},
+#ifndef __ANDROID__
     {"autosave",	"Save game automatically (autosave): ",
 	{&autosave},	put_bool,	get_bool	},
+#endif
 #ifdef MOUSE
     {"usemouse",	"Use mouse to move (usemouse): ",
 	{&use_mouse},	put_bool,	get_mouse	},

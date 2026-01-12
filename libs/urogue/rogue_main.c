@@ -44,9 +44,28 @@
 #include <mcheck.h>
 #endif
 
+int rogue_running;
+
+int is_rogue_running()
+{
+    return rogue_running;
+}
+
+int what_thing(int y, int x) {
+    struct linked_list *item;
+    struct object *obj;
+    item = find_obj(y, x);
+    if (item != NULL) {
+	obj = (struct object *) ldata(item);
+	if (obj != NULL) {
+	    return obj->o_which;
+	}
+    }
+    return 0;
+}
 
 int 
-main (int argc, char **argv)
+rogue_main (int argc, char **argv)
 {
     char *env;
     struct linked_list *item;
@@ -61,6 +80,8 @@ main (int argc, char **argv)
     char char_file[LINELEN];
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
+
+    rogue_running = TRUE;
 
 #if 0
     mtrace();	/* glibc malloc debugging */
@@ -100,6 +121,7 @@ main (int argc, char **argv)
 	    else if (getenv("USER")) 
 		strcpy(whoami, getenv("USER"));
     }
+#ifndef FLUTTER
     if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 	restore_file = file_name;
 
@@ -109,11 +131,19 @@ main (int argc, char **argv)
     if (stat(char_file, &sb) != 0) {
 	show_welcome = TRUE;
     }
-
+#endif
     /*
      * Parse command-line options
      * Anything remaining after this should be the path to a saved game.
      */
+#if 0
+printf("Running: %s", argv[0]);
+for (i=1; i<argc; i++) {
+    printf(" %s", argv[i]);
+}
+printf("\n");
+#endif
+
     while (--argc > 0 && (*++argv)[0] == '-') {
 	switch (argv[0][1]) {
 	case 'd':  /* -debug: debug mode */
@@ -149,9 +179,13 @@ main (int argc, char **argv)
 	case 'v':
 	   printf("UltraRogue version %s\n", release);
 	   exit(0);
+	   break;
 	default:
+#if 0
 	    usage();
 	    exit(1);
+#endif
+	   break;
 	}
     }
     if (argc>0)
@@ -193,6 +227,14 @@ exit(0);
 
     initscr();				/* Start up cursor package */
 
+/*
+ * needed for flutter
+ */
+LINES=25; COLS=80;
+#if 0
+printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
+#endif
+
 #ifdef PDCURSES
     {
 	int pdc_lines = LINES;
@@ -231,6 +273,7 @@ fflush(stdout);
     /*
      * Restore saved game
      */
+#ifndef FLUTTER
     if (restore_file) {
 	if (!restore(restore_file)) /* Note: restore returns on error only */
 	    exit(1);
@@ -244,6 +287,7 @@ fflush(stdout);
     usleep(250000);
     if (wizard)
 	usleep(250000);
+#endif
 
     init_monsters(monster_flag);
 
@@ -358,6 +402,9 @@ get_food:
     }
 
     playit();
+
+    rogue_running = FALSE;
+
     /* notreached */
     return 0;
 }
@@ -370,6 +417,7 @@ get_food:
 void 
 endit ()
 {
+    rogue_running = FALSE;
     fatal("Ok, if you want to exit that badly, I'll have to allow it\n");
 }
 

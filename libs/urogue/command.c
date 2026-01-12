@@ -459,6 +459,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    if (decrement)
 				msg_index = (msg_index + 9) % 10;
 		}
+#ifndef FLUTTER
 		when 'S' : 
 		    after = FALSE;
 		    if (save_game())
@@ -468,6 +469,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			endwin();
 			exit(0);
 		    }
+#endif
 		when '.' : if (rnd(2) == 0) player.t_quiet++;	/* Rest command */
 		when ',' :
 		    if (levtype == POSTLEV)

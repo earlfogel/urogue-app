@@ -240,6 +240,11 @@ death (int monst)
 void 
 score (long amount, int flags, int monst)
 {
+#ifdef __ANDROID__
+	    mvaddstr(LINES - 1, 0, morestr);
+	    refresh();
+	    wait_for(0);
+#else
     static struct sc_ent {
 	long sc_score;
 	char sc_name[76];
@@ -507,7 +512,7 @@ score (long amount, int flags, int monst)
 	if (access(fname, F_OK) == -0)
 	    unlink(fname);
     }
-
+#endif
 }
 
 void 

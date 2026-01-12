@@ -33,7 +33,9 @@ int def_array[MAXPDEF][MAXPATT];	/* Pre-defined chars */
 int 
 geta_player ()
 {
-
+#ifdef FLUTTER
+    return FALSE;
+#else
 	struct linked_list *item;
 	struct object *obj;
 	char char_file[LINELEN];	/* Where the file should be! */
@@ -202,6 +204,7 @@ again:
 	add_pack(item, TRUE);
 	cur_armor = obj;
 	return(TRUE);
+#endif
 }
 
 
@@ -263,6 +266,9 @@ puta_player (int arm, int wpt, int hpadd, int dmadd)
 	    return(TRUE);
 	}
 
+#ifdef FLUTTER
+	return(TRUE);
+#endif
 	mvwaddstr(hw,0,0,"Would you like to re-roll the character?");
 	draw(hw);
 	if(wgetch(hw) == 'y')

@@ -115,8 +115,7 @@ class _GameViewState extends State<GameView> {
     TextStyle statStyle = TextStyle(
         // fontFamily: 'PixelFont',
         fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-        /* color: Colors.black */);
+        fontWeight: FontWeight.bold);
     List<Widget> stats = [];
     for (final k in board.stats.keys) {
       String v = board.stats[k] ?? '';
@@ -140,8 +139,8 @@ class _GameViewState extends State<GameView> {
       InputTool(icon: Icons.arrow_upward, title: 'Up', cmd: 'k'),
       InputTool(icon: Icons.arrow_forward, title: 'Right', cmd: 'l'),
       InputTool(icon: Icons.update, title: 'Rest', cmd: '.'),
-      InputTool(icon: Icons.keyboard_arrow_up, title: 'Space', cmd: '<'),
-      InputTool(icon: Icons.keyboard_arrow_down, title: 'Space', cmd: '>'),
+      InputTool(icon: Icons.keyboard_arrow_up, title: 'Up stairs', cmd: '<'),
+      InputTool(icon: Icons.keyboard_arrow_down, title: 'Down stairs', cmd: '>'),
       InputTool(icon: Icons.space_bar, title: 'Space', cmd: ' '),
       InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
     ];
@@ -160,7 +159,7 @@ class _GameViewState extends State<GameView> {
     }
 
     TextStyle messageStyle = const TextStyle(
-        fontSize: 18, fontStyle: FontStyle.italic, /* color: Colors.black */);
+        fontSize: 18, fontStyle: FontStyle.italic);
 
     return Scaffold(
         body: InputListener(
@@ -196,8 +195,26 @@ class _GameViewState extends State<GameView> {
 	      key = String.fromCharCode(97 + k - LogicalKeyboardKey.keyA.keyId);
 	  }
         }
+	if (shift && k == LogicalKeyboardKey.digit1.keyId)
+	    key = '!';
+	if (shift && k == LogicalKeyboardKey.digit2.keyId)
+	    key = '@';
+	if (shift && k == LogicalKeyboardKey.digit3.keyId)
+	    key = '#';
+	if (shift && k == LogicalKeyboardKey.digit4.keyId)
+	    key = '\$';
+	if (shift && k == LogicalKeyboardKey.digit5.keyId)
+	    key = '%';
+	if (shift && k == LogicalKeyboardKey.digit6.keyId)
+	    key = '^';
+	if (shift && k == LogicalKeyboardKey.digit7.keyId)
+	    key = '&';
 	if (shift && k == LogicalKeyboardKey.digit8.keyId)
 	    key = '*';
+	if (shift && k == LogicalKeyboardKey.digit9.keyId)
+	    key = '(';
+	if (shift && k == LogicalKeyboardKey.digit0.keyId)
+	    key = ')';
 
         String s = key;
 
@@ -240,24 +257,18 @@ class _GameViewState extends State<GameView> {
             if (key.length > 1) {
               print(key);
             }
-//            if (key == "i") {
-//              print("Inventory");
-//            }
-//            if (k < 65) {
-//              print("Key: " + String.fromCharCode(k));
-//            }
             break;
         }
 
-	if (s == '~') {
+	if (s == '!') {
 	    //Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
-	    board.useSprites = !board.useSprites;
+	    //board.useSprites = !board.useSprites;
 	    if (board.useSprites) {
 	      Provider.of<ThemeProvider>(context, listen: false).darkTheme(context);
 	    } else {
 	      Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
 	    }
-	    s = ' ';
+	    s = '';
 	}
         if (s.length == 1) {
           FFIBridge.pushKey(s);

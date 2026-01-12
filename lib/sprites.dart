@@ -58,14 +58,9 @@ class Sprite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BoardData board = Provider.of<BoardData>(context);
-//return Text(cell?.data ?? '',
-//  style: TextStyle(color: cell?.color, fontSize: 16));
     if (board.hasRip) {
       return Text(cell?.data ?? '',
           style: TextStyle(color: cell?.color, fontSize: 20));
-    } else if (board.hasSpace) {
-      return Text(cell?.data ?? '',
-          style: TextStyle(color: cell?.color, fontSize: 14));
 //      return SizedBox(width: 8, height: 16, child: Text(cell?.data ?? ''));
     }
     return CustomPaint(painter: SpritePainter(cell: cell));
@@ -117,7 +112,7 @@ class SpriteSheet {
     tilesetMap['!'] = 845; // potion
     tilesetMap[']'] = 926; // armor // 913-helmet
     tilesetMap[')'] = 903; // weapon
-    tilesetMap['/'] = 983; // wand or staf
+    tilesetMap['/'] = 983; // wand or staff
     tilesetMap['='] = 929; // ring
     tilesetMap['*'] = 755; // gold
     tilesetMap['?'] = 988; // scroll
@@ -129,7 +124,7 @@ class SpriteSheet {
 
     // monsters
     tilesetMap['A'] = 287; // aquator
-    tilesetMap['B'] = 283; // bat
+    tilesetMap['B'] = 285; // beetle
     tilesetMap['C'] = 405; // centaur
     tilesetMap['D'] = 293; // dragon
     tilesetMap['E'] = 282; // emu
@@ -137,7 +132,7 @@ class SpriteSheet {
     tilesetMap['G'] = 292; // griffin
     tilesetMap['H'] = 342; // hobgoblin
     tilesetMap['I'] = 462; // ice monster
-    tilesetMap['J'] = 163; // jabberwock
+    tilesetMap['J'] = 289; // jackal
     tilesetMap['K'] = 346; // kestrel   // colorize
     tilesetMap['L'] = 465; // leprechaun
     tilesetMap['M'] = 194; // medusa
@@ -145,8 +140,8 @@ class SpriteSheet {
     tilesetMap['O'] = 344; // orc
     tilesetMap['P'] = 409; // phantom
     tilesetMap['Q'] = 289; // quagga
-    tilesetMap['R'] = 284; // rattlesnake // colorize!
-    tilesetMap['S'] = 288; // snake
+    tilesetMap['R'] = 282; // rat
+    tilesetMap['S'] = 284; // snake
     tilesetMap['T'] = 343; // troll
     tilesetMap['U'] = 294; // black unicorn
     tilesetMap['V'] = 165; // vampire
@@ -154,6 +149,32 @@ class SpriteSheet {
     tilesetMap['X'] = 467; // xroc
     tilesetMap['Y'] = 291; // yeti
     tilesetMap['Z'] = 402; // zombie
+    tilesetMap['a'] = 465; // 
+    tilesetMap['b'] = 283; // bat
+    tilesetMap['c'] = 465; // 
+    tilesetMap['d'] = 465; // 
+    tilesetMap['e'] = 465; // 
+    tilesetMap['f'] = 465; // 
+    tilesetMap['g'] = 465; // 
+    tilesetMap['h'] = 465; // 
+    tilesetMap['i'] = 465; // 
+    tilesetMap['j'] = 465; // 
+    tilesetMap['k'] = 465; // 
+    tilesetMap['l'] = 465; // 
+    tilesetMap['m'] = 465; // 
+    tilesetMap['n'] = 465; // 
+    tilesetMap['o'] = 465; // 
+    tilesetMap['p'] = 465; // 
+    tilesetMap['q'] = 465; // 
+    tilesetMap['r'] = 465; // 
+    tilesetMap['s'] = 465; // 
+    tilesetMap['t'] = 465; // 
+    tilesetMap['u'] = 465; // 
+    tilesetMap['v'] = 465; // 
+    tilesetMap['w'] = 465; // 
+    tilesetMap['x'] = 465; // 
+    tilesetMap['y'] = 465; // 
+    tilesetMap['z'] = 465; // 
 
     // color map
     colorMap['.'] = const Color.fromRGBO(0x40, 0x40, 0x40, 1);

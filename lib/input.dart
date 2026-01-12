@@ -136,7 +136,7 @@ class _InputListener extends State<InputListener> {
                 child: Row(children: [
               IconButton(
                   icon:
-                      Icon(Icons.keyboard, color: Colors.white, size: iconSize),
+                      Icon(Icons.keyboard, size: iconSize),
                   onPressed: () {
                     setState(() {
                       showKeyboard = !showKeyboard;
@@ -148,7 +148,7 @@ class _InputListener extends State<InputListener> {
                     });
                   }),
               ...(widget.toolbar.map((t) => IconButton(
-                    icon: Icon(t.icon, color: Colors.white, size: iconSize),
+                    icon: Icon(t.icon, size: iconSize),
                     onPressed: () {
                       if (t.cmd.length > 0) {
                         widget.onKeyDown?.call(t.cmd);
@@ -161,7 +161,7 @@ class _InputListener extends State<InputListener> {
 
           Container(
               width: 1,
-              height: 1,
+              height: 3,
               child: !showKeyboard
                   ? null
                   : TextField(

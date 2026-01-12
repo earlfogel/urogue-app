@@ -58,9 +58,15 @@ class Sprite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BoardData board = Provider.of<BoardData>(context);
+//return Text(cell?.data ?? '',
+//  style: TextStyle(color: cell?.color, fontSize: 16));
     if (board.hasRip) {
       return Text(cell?.data ?? '',
           style: TextStyle(color: cell?.color, fontSize: 20));
+    } else if (board.hasSpace) {
+      return Text(cell?.data ?? '',
+          style: TextStyle(color: cell?.color, fontSize: 14));
+//      return SizedBox(width: 8, height: 16, child: Text(cell?.data ?? ''));
     }
     return CustomPaint(painter: SpritePainter(cell: cell));
   }

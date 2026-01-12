@@ -14,6 +14,9 @@ class BoardData extends ChangeNotifier {
   String buffer = '';
   String message = '';
   bool hasMore = false;
+  bool hasSpace = false;
+  bool hasStats = false;
+  bool useSprites = false;
   bool hasRip = false;
   Map<String, String> stats = {};
   List<Cell> cells = [];
@@ -24,6 +27,14 @@ class BoardData extends ChangeNotifier {
     String res = '';
     for (int i = 0; i < 80; i++) {
       res += buffer[l * 80 + i];
+    }
+    return res;
+  }
+
+  String getCol(int c) {
+    String res = '';
+    for (int l = 0; l < 25; l++) {
+      res += buffer[l * 80 + c];
     }
     return res;
   }
@@ -130,15 +141,16 @@ class BoardData extends ChangeNotifier {
     buffer = buf;
 
     // r.i.p.
-    String rip = getLine(12);
-    hasRip = rip.contains('PEACE');
+    hasRip = buffer.contains('PEACE');
 
     // parse the message
     message = getLine(0).trim();
-    hasMore = message.contains('--More--');
+    hasMore = buffer.contains('--More--');
+    hasSpace = buffer.contains('Press space');
+    hasStats = false;
 
     // parse status > Level: 1  Gold: 0      Hp: 12(12)  Str: 16(16)  Arm: 4   Exp: 1/0
-    String status = getLine(23);
+    String status = getLine(23) + " " + getLine(24);
     RegExp regExp = RegExp(
       r"(([a-zA-Z]{0,9}):\s{0,8}([0-9()/]{0,9}))",
       caseSensitive: false,
@@ -150,22 +162,27 @@ class BoardData extends ChangeNotifier {
       if (g.length == 2) {
         stats[g[0] ?? '-'] = g[1] ?? '';
       }
+      hasStats = true;
     }
 
     // parse the map
     cells.clear();
+    player.x = 0;
+    player.y = 0;
 
     // if dead!
 
     if (buffer.length >= 3200) {
-      if (!hasRip) {
+      if (!hasRip && useSprites) {
         modifyCornerTiles();
         modifyWeaponTiles();
       }
 
       // start at 1 - skips the message
       // end before 23 - skips the stats
-      for (int i = 1; i < 23; i++) {
+      int start = (hasStats)? 1: 0;
+      int end = (hasStats)? 23: 25;
+      for (int i = start; i < end; i++) {
         for (int j = 0; j < 80; j++) {
           String c = buffer[i * 80 + j];
           if (c != ' ') {
@@ -188,6 +205,7 @@ class BoardData extends ChangeNotifier {
     if (hasRip) {
       message = '';
       hasMore = false;
+      hasSpace = false;
     }
 
     notifyListeners();

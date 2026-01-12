@@ -18,6 +18,7 @@ Based on Marvin Sanchez rogue flutter demo:
 
 ## Changelog
 
+- only show stats on screens where urogue shows them
 - long-tap arrow icons for <shift>-movement commands
 - double-tap arrow icons for <ctrl>-movement commands
 - fix crash when using sprites

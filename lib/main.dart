@@ -128,7 +128,7 @@ class _GameViewState extends State<GameView> {
       ]));
     }
 
-    if (board.hasRip) {
+    if (board.hasRip || !board.hasStats) {
       stats = [];
     }
 
@@ -174,7 +174,7 @@ class _GameViewState extends State<GameView> {
         // map
         Expanded(child: GameMap()),
 
-        Text(board.message, style: messageStyle),
+        Text((board.hasStats)? board.message: "", style: messageStyle),
       ]),
       onKeyDown: (String key,
           {int keyId = 0,

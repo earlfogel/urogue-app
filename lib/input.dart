@@ -101,6 +101,7 @@ class _InputListener extends State<InputListener> {
           Expanded(
               child: GestureDetector(
                   child: widget.child,
+/*
                   onTapUp: (TapUpDetails details) {
                     lastTap = details.globalPosition;
                   },
@@ -127,7 +128,9 @@ class _InputListener extends State<InputListener> {
                   onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
                     widget.onPanUpdate?.call(
                         context.findRenderObject(), details.globalPosition);
-                  })),
+                  }
+*/
+		  )),
 
           if (Platform.isAndroid || widget.showToolbar) ...[
             SingleChildScrollView(
@@ -147,14 +150,53 @@ class _InputListener extends State<InputListener> {
                       }
                     });
                   }),
-              ...(widget.toolbar.map((t) => IconButton(
+              ...(widget.toolbar.map((t) =>
+	      MaterialApp(
+	        debugShowCheckedModeBanner: false,
+		home: GestureDetector(
+//		    onTap: () {
+//print("tap: " + t.cmd);
+//		    },
+/* the onTap above doesn't work, so instead IconButton handles onPressed
+   events and Gesture detector handles the rest */
+		    child: IconButton(
                     icon: Icon(t.icon, size: iconSize),
+		    //tooltip: t.title,
                     onPressed: () {
+//print("press: " + t.cmd);
                       if (t.cmd.length > 0) {
                         widget.onKeyDown?.call(t.cmd);
                       }
                       t.onPressed?.call();
                     },
+		    ),
+                    onLongPress: () {
+//print("Long press: " + t.cmd);
+                      if (t.cmd == 'h') {
+                        widget.onKeyDown?.call('H');
+                      } else if (t.cmd == 'j') {
+                        widget.onKeyDown?.call('J');
+                      } else if (t.cmd == 'k') {
+                        widget.onKeyDown?.call('K');
+                      } else if (t.cmd == 'l') {
+                        widget.onKeyDown?.call('L');
+                      }
+                      t.onPressed?.call();
+                    },
+                    onDoubleTap: () {
+//print("Double tap: " + t.cmd);
+                      if (t.cmd == 'h') {
+                        widget.onKeyDown?.call(String.fromCharCode(8));
+                      } else if (t.cmd == 'j') {
+                        widget.onKeyDown?.call(String.fromCharCode(10));
+                      } else if (t.cmd == 'k') {
+                        widget.onKeyDown?.call(String.fromCharCode(11));
+                      } else if (t.cmd == 'l') {
+                        widget.onKeyDown?.call(String.fromCharCode(12));
+                      }
+                      t.onPressed?.call();
+                    },
+		  )
                   )))
             ]))
           ], // toolbar

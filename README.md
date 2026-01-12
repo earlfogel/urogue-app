@@ -7,8 +7,6 @@ Based on Marvin Sanchez rogue flutter demo:
 
 ## To Do
 
-- long-tap arrow icons for <shift>-movement commands
-- double-tap arrow icons for <ctrl>-movement commands
 - redraw/recenter dungeon after rotating phone
 - support pinch zoom and drag gestures to zoom/unzoom and move visible board
 - use joystick tool instead of four arrow icons for movement
@@ -20,6 +18,8 @@ Based on Marvin Sanchez rogue flutter demo:
 
 ## Changelog
 
+- long-tap arrow icons for <shift>-movement commands
+- double-tap arrow icons for <ctrl>-movement commands
 - fix crash when using sprites
 - fix: tombstone screen
 - fix: don't show stats on screens without them

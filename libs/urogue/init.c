@@ -93,6 +93,9 @@ init_player ()
 
     if (char_type == -1) {
 	/* See what type character will be */
+#ifdef FLUTTER
+	char_type = rnd(4);
+#else
 	wclear(hw) ;
 	touchwin(hw) ;
 	mvwaddstr(hw,2,0,"[1] Fighter\n[2] Magician\n[3] Cleric\n[4] Thief") ;
@@ -105,6 +108,7 @@ init_player ()
 	    char_type = wgetch(hw) - '0';
 	}
 	char_type-- ;
+#endif
     }
     player.t_ctype = char_type ;
     player.t_quiet = 0;

@@ -151,9 +151,7 @@ class _InputListener extends State<InputListener> {
                     });
                   }),
               ...(widget.toolbar.map((t) =>
-	      MaterialApp(
-	        debugShowCheckedModeBanner: false,
-		home: GestureDetector(
+		GestureDetector(
 //		    onTap: () {
 //print("tap: " + t.cmd);
 //		    },
@@ -197,7 +195,7 @@ class _InputListener extends State<InputListener> {
                       t.onPressed?.call();
                     },
 		  )
-                  )))
+                  ))
             ]))
           ], // toolbar
 

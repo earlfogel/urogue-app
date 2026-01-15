@@ -203,7 +203,7 @@ class _InputListener extends State<InputListener> {
 
           Container(
               width: 1,
-              height: 3,
+              height: 5,
               child: !showKeyboard
                   ? null
                   : TextField(

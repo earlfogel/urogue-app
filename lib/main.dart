@@ -34,7 +34,7 @@ class Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: lightMode,
+      theme: darkMode,
       darkTheme: darkMode,
       themeMode: Provider.of<ThemeProvider>(context).themeMode,
       home: const GameView(),
@@ -56,7 +56,7 @@ class GameMap extends StatelessWidget {
 
     // map
     Size size = SpriteSheet.instance().size;
-    //board.useSprites = false;
+    //board.useSprites = true;
     if (!board.useSprites) {
 	size = Size(12, 16);
     }
@@ -261,13 +261,14 @@ class _GameViewState extends State<GameView> {
         }
 
 	if (s == '!') {
-	    //Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
-	    //board.useSprites = !board.useSprites;
+	    board.useSprites = !board.useSprites;
+/*
 	    if (board.useSprites) {
 	      Provider.of<ThemeProvider>(context, listen: false).darkTheme(context);
 	    } else {
 	      Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
 	    }
+*/
 	    s = '';
 	}
         if (s.length == 1) {

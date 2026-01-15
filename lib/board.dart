@@ -14,7 +14,6 @@ class BoardData extends ChangeNotifier {
   String buffer = '';
   String message = '';
   bool hasMore = false;
-  bool hasSpace = false;
   bool hasStats = false;
   bool useSprites = false;
   bool hasRip = false;
@@ -146,7 +145,7 @@ class BoardData extends ChangeNotifier {
     // parse the message
     message = getLine(0).trim();
     hasMore = buffer.contains('--More--');
-    hasSpace = buffer.contains('Press space');
+    //if (buffer.contains('Press space')) hasMore = true;
     hasStats = false;
 
     // parse status > Level: 1  Gold: 0      Hp: 12(12)  Str: 16(16)  Arm: 4   Exp: 1/0
@@ -167,8 +166,6 @@ class BoardData extends ChangeNotifier {
 
     // parse the map
     cells.clear();
-    player.x = 0;
-    player.y = 0;
 
     // if dead!
 
@@ -205,7 +202,6 @@ class BoardData extends ChangeNotifier {
     if (hasRip) {
       message = '';
       hasMore = false;
-      hasSpace = false;
     }
 
     notifyListeners();

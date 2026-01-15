@@ -34,7 +34,7 @@ class Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: darkMode,
+      theme: lightMode,
       darkTheme: darkMode,
       themeMode: Provider.of<ThemeProvider>(context).themeMode,
       home: const GameView(),
@@ -271,6 +271,12 @@ class _GameViewState extends State<GameView> {
 */
 	    s = '';
 	}
+
+	if (s == '@') {
+            Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
+            s = '';
+        }
+
         if (s.length == 1) {
           FFIBridge.pushKey(s);
         }

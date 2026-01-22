@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
+import 'board.dart';
 
 class CustomEditingController extends TextEditingController {
   @override
@@ -88,8 +90,32 @@ class _InputListener extends State<InputListener> {
     hscroller.dispose();
   }
 
+  /*
+   * Is the player about to longPress or doubleTap into a monster?
+   */
+  bool hasMonst(String cmd) {
+    BoardData board = Provider.of<BoardData>(context, listen: false);
+    final pattern = RegExp("[a-zA-Z]");
+    var pos;
+    if (cmd == 'h')
+      pos = board.player.y * 80 + board.player.x - 1;
+    else if (cmd == 'j')
+      pos = board.player.y * 80 + board.player.x + 80;
+    else if (cmd == 'k')
+      pos = board.player.y * 80 + board.player.x - 80;
+    else if (cmd == 'l')
+      pos = board.player.y * 80 + board.player.x + 1;
+
+    String c = board.buffer[pos];
+    if (pattern.hasMatch(c))
+      return true;
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    BoardData board = Provider.of<BoardData>(context, listen: false);
     double iconSize = 28.0;
     return Focus(
         onFocusChange: (focused) {
@@ -152,46 +178,44 @@ class _InputListener extends State<InputListener> {
                   }),
               ...(widget.toolbar.map((t) =>
 		GestureDetector(
+// This onTap doesn't work, so instead use IconButton for onPressed
+// events and Gesture detector for the rest
 //		    onTap: () {
 //print("tap: " + t.cmd);
 //		    },
-/* the onTap above doesn't work, so instead IconButton handles onPressed
-   events and Gesture detector handles the rest */
 		    child: IconButton(
                     icon: Icon(t.icon, size: iconSize),
 		    //tooltip: t.title,
                     onPressed: () {
 //print("press: " + t.cmd);
-                      if (t.cmd.length > 0) {
-                        widget.onKeyDown?.call(t.cmd);
-                      }
-                      t.onPressed?.call();
+		      if (t.cmd.length > 0) {
+			widget.onKeyDown?.call(t.cmd);
+		      }
+		      t.onPressed?.call();
                     },
 		    ),
                     onLongPress: () {
 //print("Long press: " + t.cmd);
-                      if (t.cmd == 'h') {
-                        widget.onKeyDown?.call('H');
-                      } else if (t.cmd == 'j') {
-                        widget.onKeyDown?.call('J');
-                      } else if (t.cmd == 'k') {
-                        widget.onKeyDown?.call('K');
-                      } else if (t.cmd == 'l') {
-                        widget.onKeyDown?.call('L');
-                      }
-                      t.onPressed?.call();
+		      String match = "hjkl";
+		      if (hasMonst(t.cmd))
+			  widget.onKeyDown?.call('f');
+		      else if (match.contains(t.cmd))
+			  widget.onKeyDown?.call(t.cmd.toUpperCase());
+		      t.onPressed?.call();
                     },
                     onDoubleTap: () {
 //print("Double tap: " + t.cmd);
-                      if (t.cmd == 'h') {
-                        widget.onKeyDown?.call(String.fromCharCode(8));
-                      } else if (t.cmd == 'j') {
-                        widget.onKeyDown?.call(String.fromCharCode(10));
-                      } else if (t.cmd == 'k') {
-                        widget.onKeyDown?.call(String.fromCharCode(11));
-                      } else if (t.cmd == 'l') {
-                        widget.onKeyDown?.call(String.fromCharCode(12));
-                      }
+		      String match = "hjkl";
+		      if (hasMonst(t.cmd))
+			  widget.onKeyDown?.call('F');
+		      else if (t.cmd == 'h')
+			widget.onKeyDown?.call(String.fromCharCode(8));
+		      else if (t.cmd == 'j')
+			widget.onKeyDown?.call(String.fromCharCode(10));
+		      else if (t.cmd == 'k')
+			widget.onKeyDown?.call(String.fromCharCode(11));
+		      else if (t.cmd == 'l')
+			widget.onKeyDown?.call(String.fromCharCode(12));
                       t.onPressed?.call();
                     },
 		  )
@@ -201,7 +225,7 @@ class _InputListener extends State<InputListener> {
 
           Container(
               width: 1,
-              height: 5,
+              height: 1,
               child: !showKeyboard
                   ? null
                   : TextField(

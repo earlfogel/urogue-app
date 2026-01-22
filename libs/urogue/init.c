@@ -87,28 +87,34 @@ void
 init_player ()
 {
     int special = rnd(10) ;
+    char c;
 
     pstats.s_lvl = 1 ;
     pstats.s_exp = 0L ;
 
     if (char_type == -1) {
 	/* See what type character will be */
-#ifdef FLUTTER
-	char_type = rnd(4);
-#else
 	wclear(hw) ;
 	touchwin(hw) ;
-	mvwaddstr(hw,2,0,"[1] Fighter\n[2] Magician\n[3] Cleric\n[4] Thief") ;
+	mvwaddstr(hw,3,0,"[1] Fighter\n[2] Magician\n[3] Cleric\n[4] Thief") ;
 	mvwaddstr(hw, 0, 0, "What character class do you desire? ") ;
 	draw(hw) ;
-	char_type = wgetch(hw) - '0' ;
-	while (char_type < 1 || char_type > 4) {
-	    mvwaddstr(hw,0,0,"Please enter a character type between 1 and 4: ");
-	    draw(hw) ;
-	    char_type = wgetch(hw) - '0';
-	}
-	char_type-- ;
+	do {
+#ifdef FLUTTER
+	    c = wgetch(hw);
+	    if (c == 'h') c = '1';
+	    if (c == 'j') c = '2';
+	    if (c == 'k') c = '3';
+	    if (c == 'l') c = '4';
+	    mvwaddstr(hw,1,0,"(or use the arrows below)");
 #endif
+	    char_type = c - '0' ;
+	    if (char_type < 1 || char_type > 4) {
+		mvwaddstr(hw,0,0,"Please enter a character type between 1 and 4: ");
+		draw(hw) ;
+	    }
+	} while (char_type < 1 || char_type > 4);
+	char_type-- ;
     }
     player.t_ctype = char_type ;
     player.t_quiet = 0;

@@ -146,7 +146,7 @@ death (int monst)
 	ch = readchar();
     }
     if (ch != '\n' && ch != '\r')
-	wait_for('\n');
+	wait_for(0);
 
     if (autosave == TRUE) {
 	char fname[200];

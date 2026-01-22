@@ -267,9 +267,8 @@ puta_player (int arm, int wpt, int hpadd, int dmadd)
 	}
 
 #ifdef FLUTTER
-	mvwaddstr(hw,7,5,"-- press any key to continue --");
+	mvwaddstr(hw,8,5,"-- press any key to continue --");
 	draw(hw);
-	(void) wgetch(hw);
 	(void) wgetch(hw);
 	return(TRUE);
 #endif

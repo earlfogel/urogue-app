@@ -26,6 +26,7 @@ void main() {
 
   runApp(app);
 }
+
 class Game extends StatelessWidget {
   const Game({Key? key}) : super(key: key);
 
@@ -47,7 +48,7 @@ class GameMap extends StatelessWidget {
   Widget build(BuildContext context) {
     BoardData board = Provider.of<BoardData>(context);
 
-    Size screen = MediaQuery.of(context).size;
+    Size screen = MediaQuery.sizeOf(context);
     RenderObject? obj = context.findRenderObject();
     if (obj != null) {
       RenderBox? box = obj as RenderBox;
@@ -63,9 +64,40 @@ class GameMap extends StatelessWidget {
     Offset playerXY =
         Offset(board.player.x * size.width, board.player.y * size.height);
 
-    if (board.hasRip) {
-      size = Size(16, 16);
-      playerXY = Offset(40 * size.width, 20 * size.height);
+    /* special screens, e.g. inventory, help, options) */
+    if (!board.hasStats && board.buffer.length >= 3200) {
+
+      int first_row=-1, last_row=-1, first_col=-1, last_col=-1;
+      for (int i = 0; i < 25; i++) {
+	String line = board.getLine(i).trim();
+	if (line.contains(RegExp(r'[^ ]'))) {
+	  if (first_row < 0) {
+	    first_row = i;
+	  }
+	  last_row = i;
+	}
+      }
+      for (int i = 0; i < 80; i++) {
+	String col = board.getCol(i).trim();
+	if (col.contains(RegExp(r'[^ ]'))) {
+	  if (first_col < 0) {
+	    first_col = i;
+	  }
+	  last_col = i;
+	}
+      }
+
+      /* center, if there's room, otherwise left/top justify */
+      if (first_row > -1 && first_row <= last_row
+	  && first_col > -1 && first_col <= last_col) {
+	int playerX = (first_col + last_col) ~/ 2;
+	int playerY = (first_row + last_row) ~/ 2;
+	if (screen.width / size.width < last_col - first_col)
+	    playerX = first_col + (screen.width ~/ (size.width * 2));
+	if ((screen.height - 40) / size.height < last_row - first_row)
+	    playerY = first_row + ((screen.height - 40) ~/ (size.height * 2));
+	playerXY = Offset(playerX * size.width, playerY * size.height);
+      }
     }
 
     Offset center =
@@ -73,11 +105,14 @@ class GameMap extends StatelessWidget {
 
     List<Widget> map = [];
     for (final c in board.cells) {
+//String match = "-_|+.";
+//if (!match.contains(c.data)) print(c.data); stdout.flush();
 	map.add(Positioned(
           top: center.dy + (size.height * (c.y - 2)),
           left: center.dx + (size.width * c.x),
           child: (board.useSprites? Sprite(cell: c):
-	  Text(c.data, style: TextStyle(fontSize: size.width)))));
+	  Sprite(cell: c):
+	  Text(c.data, style: TextStyle(fontSize: size.width))));
     }
 
     return Stack(children: map);
@@ -123,7 +158,7 @@ class _GameViewState extends State<GameView> {
         stats.add(Expanded(child: Container()));
       }
       stats.add(Row(children: [
-        Text('$k: ', style: statStyle),
+        Text((k != "Player")? '$k: ': '', style: statStyle),
         Text('$v  ', style: statStyle)
       ]));
     }
@@ -162,18 +197,21 @@ class _GameViewState extends State<GameView> {
         fontSize: 18, fontStyle: FontStyle.italic);
 
     return Scaffold(
-        body: InputListener(
+        body: OrientationBuilder(
+        builder: (context, orientation) {
+	    Future.delayed(const Duration(milliseconds: 50), _updateScreen);
+	    return SafeArea(
+	    child: InputListener(
       toolbar: commands,
       showToolbar: true,
       child: Column(children: [
         // stats
-        Padding(
-            padding: EdgeInsets.only(top: Platform.isAndroid ? 32 : 0),
-            child: Row(children: stats)),
+	Row(children: stats),
 
         // map
         Expanded(child: GameMap()),
 
+	// messages
         Text((board.hasStats)? board.message: "", style: messageStyle),
       ]),
       onKeyDown: (String key,
@@ -273,16 +311,16 @@ class _GameViewState extends State<GameView> {
 	}
 
 	if (s == '@') {
-            Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
-            s = '';
-        }
+	    Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
+	    s = '';
+	}
 
         if (s.length == 1) {
           FFIBridge.pushKey(s);
         }
         Future.delayed(const Duration(milliseconds: 50), _updateScreen);
       },
-    ));
+    ));}));
   }
 }
 
@@ -324,5 +362,3 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
-

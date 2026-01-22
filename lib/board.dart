@@ -151,7 +151,8 @@ class BoardData extends ChangeNotifier {
     // parse status > Level: 1  Gold: 0      Hp: 12(12)  Str: 16(16)  Arm: 4   Exp: 1/0
     String status = getLine(23) + " " + getLine(24);
     RegExp regExp = RegExp(
-      r"(([a-zA-Z]{0,9}):\s{0,8}([0-9()/]{0,9}))",
+    //r"(([a-zA-Z]{0,9}):\s{0,8}([0-9()/]{0,9}))",
+      r"(([a-zA-Z]{0,9}):\s{0,8}([^ ]+))",
       caseSensitive: false,
       multiLine: false,
     );

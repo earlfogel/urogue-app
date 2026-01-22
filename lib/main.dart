@@ -110,7 +110,8 @@ class GameMap extends StatelessWidget {
 	map.add(Positioned(
           top: center.dy + (size.height * (c.y - 2)),
           left: center.dx + (size.width * c.x),
-          child: (board.useSprites? Sprite(cell: c):
+//          child: (board.useSprites? Sprite(cell: c):
+          child: (board.useSprites && (Sprite(cell: c) != null))?
 	  Sprite(cell: c):
 	  Text(c.data, style: TextStyle(fontSize: size.width))));
     }

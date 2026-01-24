@@ -2,40 +2,44 @@
 
 A Flutter app to play urogue.
 
-Based on Marvin Sanchez rogue flutter demo:
+Based on my urogue reboot and Marvin Sanchez' rogue flutter demo:
+
+- https://github.com/earlfogel/UltraRogue
 - https://github.com/icedman/rogue_flutter
 
-## To Do
+## About Urogue
 
-- redraw/recenter dungeon after rotating phone
-- support pinch zoom and drag gestures to zoom/unzoom and move visible board
-- use joystick tool instead of four arrow icons for movement
-  (or tap on board to move to that spot)
-- switch between text and graphical views
-- show score at end of game
-- press <space> to choose a random character class
-  (or use arrow keys?)
+Urogue is an old ascii-graphics game developed in the 1980s and 1990s.
+It is one of the earliest "Roguelikes", in case you are familiar with that
+genre.
+
+For more information, see [my urogue github repository](https://github.com/earlfogel/UltraRogue)
 
 ## Changelog
 
-- only show stats on screens where urogue shows them
-- long-tap arrow icons for <shift>-movement commands
-- double-tap arrow icons for <ctrl>-movement commands
+- long-press on arrow icons for <shift>-movement commands
+- double-tap on arrow icons for <ctrl>-movement commands
+- long-press on arrow towards monster to 'f'ight
+- double-tap on arrow towards monster to 'F'ight
+- press '@' to switch between light and dark themes
+- press '!' to switch between text and graphical views
+- redraw/recenter dungeon after rotating phone
+- avoid overlap with phone notches, camera, etc.
+- improved status display on small screens
+- fix: only show stats on screens where urogue shows them
 - fix crash when using sprites
 - fix: tombstone screen
-- fix: don't show stats on screens without them
-- left-justify board if player not visible (Inventory, Options, Help screens)
-- support for light and dark themes
-- switch to text view since sprites are broken
-- support more shift and control commands
+- fix: only show player stats on screens where rogue shows them
+- fix: modernize urogue code to use function prototypes
+- improved display of screens where player not visible (Inventory, Options, Help, ...)
 
-## Flutter Help
+## To Do
 
-A few resources to get you started if this is your first Flutter project:
+- find a better tileset (or two) for the graphical view
+- support pinch zoom and drag gestures to zoom/unzoom and move visible board
+- use joystick tool instead of four arrow icons for movement
+  (or tap on board to move to that spot)
+- show score at end of game
+- if hasMore, then tapping any icon sends <space> to urogue
+- make help, genocide and makemon single column when screen is narrow
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

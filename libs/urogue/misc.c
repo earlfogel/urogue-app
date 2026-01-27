@@ -210,6 +210,9 @@ look (bool wakeup)
 		    case ' ':
 			break;
 		    default:
+#ifdef FLUTTER
+			if ((horiz || vert) && (x == hero.x || y == hero.y))
+#endif
 			running = FALSE;
 			break;
 		}

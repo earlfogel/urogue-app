@@ -79,9 +79,11 @@ endmsg ()
 	wmove(cw, 0, mpos);
 	waddnstr(cw, morestr, COLS - mpos);
 	draw(cw);
+#ifndef FLUTTER
 	if (pstats.s_hpt < max_stats.s_hpt/5)
 	    wait_for(' ');  /* rogue should be more careful when injured */
 	else
+#endif
 	    wait_for(0);
     }
     mvwaddstr(cw, 0, 0, mbuf);

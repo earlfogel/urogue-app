@@ -100,8 +100,8 @@ init_player ()
 	mvwaddstr(hw, 0, 0, "What character class do you desire? ") ;
 	draw(hw) ;
 	do {
-#ifdef FLUTTER
 	    c = wgetch(hw);
+#ifdef FLUTTER
 	    if (c == 'h') c = '1';
 	    if (c == 'j') c = '2';
 	    if (c == 'k') c = '3';

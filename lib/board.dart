@@ -17,6 +17,7 @@ class BoardData extends ChangeNotifier {
   bool hasStats = false;
   bool useSprites = false;
   bool hasRip = false;
+  bool isDarkTheme = false;
   Map<String, String> stats = {};
   List<Cell> cells = [];
 
@@ -168,10 +169,14 @@ class BoardData extends ChangeNotifier {
     // parse the map
     cells.clear();
 
-    // if dead!
+    // change color based on theme
+    var defaultColor = Colors.white;
+    if (!isDarkTheme) {
+	defaultColor = Colors.black;
+    }
 
     if (buffer.length >= 3200) {
-      if (!hasRip && useSprites) {
+      if (!hasRip && useSprites && hasStats) {
         modifyCornerTiles();
         modifyWeaponTiles();
       }
@@ -184,7 +189,11 @@ class BoardData extends ChangeNotifier {
         for (int j = 0; j < 80; j++) {
           String c = buffer[i * 80 + j];
           if (c != ' ') {
-            Color clr = sheet.colorMap[c] ?? Colors.white;
+            Color clr = sheet.colorMap[c] ?? defaultColor;
+	    if (!isDarkTheme) {
+		if (c == '@')
+		    clr = Colors.yellow.shade600;
+	    }
             Cell cell = Cell()
               ..data = c
               ..x = j

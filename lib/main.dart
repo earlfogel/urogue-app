@@ -58,19 +58,21 @@ class GameMap extends StatelessWidget {
     // map
     Size size = SpriteSheet.instance().size;
     //board.useSprites = true;
-    if (!board.useSprites) {
+    if (!board.useSprites || !board.hasStats) {
 	size = Size(12, 16);
+	if (Platform.isAndroid && board.hasStats)
+	    size = Size(14,18);
     }
+
     Offset playerXY =
         Offset(board.player.x * size.width, board.player.y * size.height);
 
-    /* special screens, e.g. inventory, help, options) */
+    /* Special screens, e.g. inventory, help, options */
     if (!board.hasStats && board.buffer.length >= 3200) {
-
       int first_row=-1, last_row=-1, first_col=-1, last_col=-1;
       for (int i = 0; i < 25; i++) {
 	String line = board.getLine(i).trim();
-	if (line.contains(RegExp(r'[^ ]'))) {
+	if (line.length > 0) {
 	  if (first_row < 0) {
 	    first_row = i;
 	  }
@@ -79,24 +81,23 @@ class GameMap extends StatelessWidget {
       }
       for (int i = 0; i < 80; i++) {
 	String col = board.getCol(i).trim();
-	if (col.contains(RegExp(r'[^ ]'))) {
+	if (col.length > 0) {
 	  if (first_col < 0) {
 	    first_col = i;
 	  }
 	  last_col = i;
 	}
       }
-
       /* center, if there's room, otherwise left/top justify */
       if (first_row > -1 && first_row <= last_row
 	  && first_col > -1 && first_col <= last_col) {
-	int playerX = (first_col + last_col) ~/ 2;
-	int playerY = (first_row + last_row) ~/ 2;
+	int centerX = (first_col + last_col) ~/ 2;
+	int centerY = (first_row + last_row) ~/ 2;
 	if (screen.width / size.width < last_col - first_col)
-	    playerX = first_col + (screen.width ~/ (size.width * 2));
+	    centerX = first_col + (screen.width ~/ (size.width * 2));
 	if ((screen.height - 40) / size.height < last_row - first_row)
-	    playerY = first_row + ((screen.height - 40) ~/ (size.height * 2));
-	playerXY = Offset(playerX * size.width, playerY * size.height);
+	    centerY = first_row + ((screen.height - 40) ~/ (size.height * 2));
+	playerXY = Offset(centerX * size.width, centerY * size.height);
       }
     }
 
@@ -105,15 +106,12 @@ class GameMap extends StatelessWidget {
 
     List<Widget> map = [];
     for (final c in board.cells) {
-//String match = "-_|+.";
-//if (!match.contains(c.data)) print(c.data); stdout.flush();
 	map.add(Positioned(
           top: center.dy + (size.height * (c.y - 2)),
           left: center.dx + (size.width * c.x),
-//          child: (board.useSprites? Sprite(cell: c):
-          child: (board.useSprites && (Sprite(cell: c) != null))?
-	  Sprite(cell: c):
-	  Text(c.data, style: TextStyle(fontSize: size.width))));
+          child: (board.hasStats && board.useSprites && (Sprite(cell: c) != null))?
+	    Sprite(cell: c):
+	    Text(c.data, style: TextStyle(fontSize: size.width))));
     }
 
     return Stack(children: map);
@@ -183,10 +181,8 @@ class _GameViewState extends State<GameView> {
 
     if (board.hasRip) {
       commands = [
-        InputTool(
-            icon: Icons.play_arrow,
-            title: 'Left',
-            cmd: '',
+        InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
+        InputTool(icon: Icons.play_arrow, title: 'Left', cmd: '',
             onPressed: () {
               FFIBridge.restartApp();
               Future.delayed(const Duration(milliseconds: 500), _updateScreen);
@@ -313,6 +309,13 @@ class _GameViewState extends State<GameView> {
 
 	if (s == '@') {
 	    Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
+if (Provider.of<ThemeProvider>(context, listen: false).isDarkTheme(context)) {
+    //print("Dark Theme");
+    board.isDarkTheme = true;
+} else {
+    //print("Light Theme");
+    board.isDarkTheme = false;
+}
 	    s = '';
 	}
 
@@ -325,7 +328,7 @@ class _GameViewState extends State<GameView> {
   }
 }
 
-final systemTheme = ThemeMode.system;
+//final systemTheme = ThemeMode.system;
 
 ThemeData lightMode = ThemeData(
     brightness: Brightness.light,
@@ -361,5 +364,12 @@ class ThemeProvider with ChangeNotifier {
       _themeMode = ThemeMode.dark;
     }
     notifyListeners();
+  }
+  bool isDarkTheme(BuildContext context) {
+    if (Theme.of(context).brightness == Brightness.dark) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

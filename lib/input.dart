@@ -61,6 +61,7 @@ class _InputListener extends State<InputListener> {
 
   bool showKeyboard = false;
   Offset lastTap = const Offset(0, 0);
+  bool _isPressed = false;
 
   @override
   void initState() {
@@ -97,20 +98,40 @@ class _InputListener extends State<InputListener> {
     BoardData board = Provider.of<BoardData>(context, listen: false);
     final pattern = RegExp("[a-zA-Z]");
     var pos;
-    if (cmd == 'h')
-      pos = board.player.y * 80 + board.player.x - 1;
-    else if (cmd == 'j')
-      pos = board.player.y * 80 + board.player.x + 80;
-    else if (cmd == 'k')
-      pos = board.player.y * 80 + board.player.x - 80;
-    else if (cmd == 'l')
-      pos = board.player.y * 80 + board.player.x + 1;
+    if ("hjkl".contains(cmd)) {
+	if (cmd == 'h')
+	  pos = board.player.y * 80 + board.player.x - 1;
+	else if (cmd == 'j')
+	  pos = board.player.y * 80 + board.player.x + 80;
+	else if (cmd == 'k')
+	  pos = board.player.y * 80 + board.player.x - 80;
+	else if (cmd == 'l')
+	  pos = board.player.y * 80 + board.player.x + 1;
 
-    String c = board.buffer[pos];
-    if (pattern.hasMatch(c))
-      return true;
+	String c = board.buffer[pos];
+	if (pattern.hasMatch(c))
+	  return true;
+    }
 
     return false;
+  }
+
+  void LongPressAction(InputTool t) {
+    if (_isPressed) {
+      if (hasMonst(t.cmd))
+          widget.onKeyDown?.call('f');
+      else if ("hjkl".contains(t.cmd))
+	  widget.onKeyDown?.call(t.cmd.toUpperCase());
+      else
+	widget.onKeyDown?.call(t.cmd);
+      t.onPressed?.call();
+      if (_isPressed) {
+	Future.delayed(Duration(milliseconds: 700), () {
+	  if (_isPressed)
+	    LongPressAction(t);
+	});
+      }
+    }
   }
 
   @override
@@ -127,35 +148,6 @@ class _InputListener extends State<InputListener> {
           Expanded(
               child: GestureDetector(
                   child: widget.child,
-/*
-                  onTapUp: (TapUpDetails details) {
-                    lastTap = details.globalPosition;
-                  },
-                  onTapDown: (TapDownDetails details) {
-                    // if (!focusNode.hasFocus) {
-                    //   focusNode.requestFocus();
-                    //   textFocusNode.unfocus();
-                    //   FocusScope.of(context).unfocus();
-                    // }
-                    // if (!textFocusNode.hasFocus) {
-                    //   textFocusNode.requestFocus();
-                    // }
-                    widget.onTapDown?.call(
-                        context.findRenderObject(), details.globalPosition);
-                  },
-                  onDoubleTap: () {
-                    widget.onDoubleTapDown
-                        ?.call(context.findRenderObject(), lastTap);
-                  },
-                  onPanUpdate: (DragUpdateDetails details) {
-                    widget.onPanUpdate?.call(
-                        context.findRenderObject(), details.globalPosition);
-                  },
-                  onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
-                    widget.onPanUpdate?.call(
-                        context.findRenderObject(), details.globalPosition);
-                  }
-*/
 		  )),
 
           if (Platform.isAndroid || widget.showToolbar) ...[
@@ -178,16 +170,12 @@ class _InputListener extends State<InputListener> {
                   }),
               ...(widget.toolbar.map((t) =>
 		GestureDetector(
-// This onTap doesn't work, so instead use IconButton for onPressed
-// events and Gesture detector for the rest
-//		    onTap: () {
-//print("tap: " + t.cmd);
-//		    },
+		    // use IconButton for onPressed events
+		    // and Gesture detector for the rest
 		    child: IconButton(
                     icon: Icon(t.icon, size: iconSize),
 		    //tooltip: t.title,
                     onPressed: () {
-//print("press: " + t.cmd);
 		      if (t.cmd.length > 0) {
 			widget.onKeyDown?.call(t.cmd);
 		      }
@@ -195,17 +183,10 @@ class _InputListener extends State<InputListener> {
                     },
 		    ),
                     onLongPress: () {
-//print("Long press: " + t.cmd);
-		      String match = "hjkl";
-		      if (hasMonst(t.cmd))
-			  widget.onKeyDown?.call('f');
-		      else if (match.contains(t.cmd))
-			  widget.onKeyDown?.call(t.cmd.toUpperCase());
-		      t.onPressed?.call();
+		      _isPressed = true;
+		      LongPressAction(t);
                     },
                     onDoubleTap: () {
-//print("Double tap: " + t.cmd);
-		      String match = "hjkl";
 		      if (hasMonst(t.cmd))
 			  widget.onKeyDown?.call('F');
 		      else if (t.cmd == 'h')
@@ -217,6 +198,15 @@ class _InputListener extends State<InputListener> {
 		      else if (t.cmd == 'l')
 			widget.onKeyDown?.call(String.fromCharCode(12));
                       t.onPressed?.call();
+                    },
+                    onLongPressEnd: (details) {
+                      _isPressed = false;
+                    },
+                    onTapUp: (details) {
+                      _isPressed = false;
+                    },
+                    onTapCancel: () {
+                      _isPressed = false;
                     },
 		  )
                   ))

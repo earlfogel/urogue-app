@@ -58,6 +58,8 @@ class Sprite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BoardData board = Provider.of<BoardData>(context);
+//return Text(cell?.data ?? '',
+//  style: TextStyle(color: cell?.color, fontSize: 16));
     if (board.hasRip) {
       return Text(cell?.data ?? '',
           style: TextStyle(color: cell?.color, fontSize: 20));
@@ -106,6 +108,8 @@ class SpriteSheet {
     tilesetMap['8'] = 905; // spear
 
     tilesetMap['+'] = 534; // door
+    tilesetMap['['] = 626; // pool
+    tilesetMap['"'] = 627; // poison pool
     tilesetMap['%'] = 532; // staircase
 
     tilesetMap[':'] = 822; // food
@@ -175,6 +179,9 @@ class SpriteSheet {
     tilesetMap['x'] = 465; // 
     tilesetMap['y'] = 465; // 
     tilesetMap['z'] = 465; // 
+//tilesetMap['R'] = 1098; // test
+//tilesetMap['b'] = 1082; // test
+//tilesetMap['x'] = 1114; // test
 
     // color map
     colorMap['.'] = const Color.fromRGBO(0x40, 0x40, 0x40, 1);

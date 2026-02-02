@@ -21,17 +21,21 @@ For more information, see my [urogue github repository](https://github.com/earlf
 - double-tap on arrow icons for ctrl-movement commands
 - long-press on arrow towards monster to 'f'ight
 - double-tap on arrow towards monster to 'F'ight
+- hold down movement, etc. icons to repeat
 - press '@' to switch between light and dark themes
 - press '!' to switch between text and graphical views
 - redraw/recenter dungeon after rotating phone
 - avoid overlap with phone notches, camera, etc.
 - improved status display on small screens
-- fix: only show stats on screens where urogue shows them
+- improved display of screens without map (Inventory, Options, Help, ...)
+- fix: reset dungeon/player/pack/bag on restart from tombstone screen
+- fix: don't duplicate daemons on restart from tombstone screen
+- fix: add escape icon to tombstone screen
+- fix: rare bug setting SROGUEOPTS options (make boolean options real booleans)
 - fix crash when using sprites
 - fix: tombstone screen
 - fix: only show player stats on screens where rogue shows them
 - fix: modernize urogue code to use function prototypes
-- improved display of screens where player not visible (Inventory, Options, Help, ...)
 
 ## To Do
 
@@ -40,6 +44,5 @@ For more information, see my [urogue github repository](https://github.com/earlf
 - use joystick tool instead of four arrow icons for movement
   (or tap on board to move to that spot)
 - show score at end of game
-- if hasMore, then tapping any icon sends <space> to urogue
 - make help, genocide and makemon single column when screen is narrow
 

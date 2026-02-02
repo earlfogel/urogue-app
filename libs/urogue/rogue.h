@@ -1093,6 +1093,9 @@ void bag_inventory(struct linked_list *list);
 int bag_char(struct object *obj, struct linked_list *bag);
 void bagletter(struct linked_list *item);
 void delbagletter(struct linked_list *item);
+#ifdef FLUTTER
+void reset_bag(void);
+#endif
 /* chase.c */
 void do_chase(struct thing *th, bool flee);
 void runto(coord *runner, coord *spot);
@@ -1415,6 +1418,9 @@ void idenpack(void);
 void getletter(struct linked_list *item);
 void freeletter(struct linked_list *item);
 void show_floor(void);
+#ifdef FLUTTER
+void reset_pack(void);
+#endif
 /* passages.c */
 void do_passages(void);
 void conn(int r1, int r2);
@@ -1426,6 +1432,9 @@ void steal(void);
 void pray(void);
 void affect(void);
 void cast(void);
+#ifdef FLUTTER
+void reset_player(void);
+#endif
 /* potions.c */
 void quaff(int which, bool blessed);
 void lower_level(int who);

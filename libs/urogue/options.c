@@ -17,6 +17,7 @@ typedef union
     void *varg;
     char *str;
     int  *iarg;
+    bool *barg;
 } opt_arg;
 
 struct optstruct {
@@ -139,7 +140,7 @@ option ()
 void
 put_bool(opt_arg *opt, WINDOW *win)
 {
-    waddstr(win, *opt->iarg ? "True" : "False");
+    waddstr(win, *opt->barg ? "True" : "False");
 }
 
 /*
@@ -211,7 +212,7 @@ get_bool(opt_arg *opt, WINDOW *win)
     curs_set(1);			/* show cursor */
     op_bad = TRUE;
     getyx(win, oy, ox);
-    waddstr(win, *opt->iarg ? "True" : "False");
+    waddstr(win, *opt->barg ? "True" : "False");
     while(op_bad)	
     {
 	wmove(win, oy, ox);
@@ -220,12 +221,12 @@ get_bool(opt_arg *opt, WINDOW *win)
 	{
 	    case 't':
 	    case 'T':
-		*opt->iarg = TRUE;
+		*opt->barg = TRUE;
 		op_bad = FALSE;
 		break;
 	    case 'f':
 	    case 'F':
-		*opt->iarg = FALSE;
+		*opt->barg = FALSE;
 		op_bad = FALSE;
 		break;
 	    case '\n':
@@ -247,7 +248,7 @@ get_bool(opt_arg *opt, WINDOW *win)
     }
     wmove(win, oy, ox);
     wclrtoeol(win);
-    waddstr(win, *opt->iarg ? "True" : "False");
+    waddstr(win, *opt->barg ? "True" : "False");
     waddch(win, '\n');
     if (!showcursor) curs_set(0);			/* hide cursor */
     return NORM;
@@ -453,11 +454,11 @@ int
 get_mouse(opt_arg *opt, WINDOW *win)
 {
     int ret;
-    bool old_mouse = *opt->iarg;
+    bool old_mouse = *opt->barg;
 
     ret = get_bool(opt, win);
 
-    if (*opt->iarg != old_mouse) {
+    if (*opt->barg != old_mouse) {
 	if (use_mouse) {
 	    mousemask(BUTTON1_RELEASED, NULL);	/* enable KEY_MOUSE */
 	} else {
@@ -499,7 +500,7 @@ parse_opts (char *str)
 	    if (EQSTR(str, op->o_name, len))
 	    {
 		if (op->o_putfunc == put_bool)	/* if option is a boolean */
-		    *(bool *)op->o_opt.iarg = TRUE;
+		    *op->o_opt.barg = TRUE;
 		else				/* string option */
 		{
 		    char *start;
@@ -560,7 +561,10 @@ parse_opts (char *str)
 	    else if (op->o_putfunc == put_bool
 	      && EQSTR(str, "no", 2) && EQSTR(str + 2, op->o_name, len - 2))
 	    {
-		*(bool *)op->o_opt.iarg = FALSE;
+		*op->o_opt.barg = FALSE;
+		break;
+	    } else if (strcmp(str,"debug") == 0) {  /* a hidden option */
+		canwizard = TRUE;
 		break;
 	    }
 

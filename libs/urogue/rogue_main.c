@@ -44,6 +44,7 @@
 #include <mcheck.h>
 #endif
 
+#ifdef FLUTTER
 int rogue_running;
 
 int is_rogue_running()
@@ -63,6 +64,7 @@ int what_thing(int y, int x) {
     }
     return 0;
 }
+#endif
 
 int 
 rogue_main (int argc, char **argv)
@@ -80,8 +82,6 @@ rogue_main (int argc, char **argv)
     char char_file[LINELEN];
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
-
-    rogue_running = TRUE;
 
 #if 0
     mtrace();	/* glibc malloc debugging */
@@ -218,19 +218,43 @@ exit(0);
     fd_data[1].mi_name = ALLOC(LINELEN);
     strcpy(fd_data[1].mi_name, fruit);
 
+#ifdef FLUTTER
+if (rogue_running) {
+    /* we're restarting, so reset a few things */
+    playing = TRUE;
+    cleanup_old_level();
+    reset_player();
+    reset_pack();
+    if (is_carrying(TR_PURSE))
+	reset_bag();
+    monst_dead = TRUE;
+    after = FALSE;
+    count = 0;
+    no_command = 0;
+    kill_daemon(DAEMON_DOCTOR);
+    extinguish_fuse(FUSE_SWANDER);
+    kill_daemon(DAEMON_STOMACH);
+    kill_daemon(DAEMON_RUNNERS);
+} else {
+    rogue_running = TRUE;
+#endif
     init_things();			/* Set up probabilities of things */
     init_fd();				/* Set up food probabilities */
     init_colors();			/* Set up colors of potions */
     init_stones();			/* Set up stone settings of rings */
     init_materials();			/* Set up materials of wands */
     init_names();			/* Set up names of scrolls */
-
+#ifdef FLUTTER
+}
+#endif
     initscr();				/* Start up cursor package */
 
 /*
  * needed for flutter
  */
+#ifdef FLUTTER
 LINES=25; COLS=80;
+#endif
 #if 0
 printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
 #endif
@@ -403,8 +427,6 @@ get_food:
 
     playit();
 
-    rogue_running = FALSE;
-
     /* notreached */
     return 0;
 }
@@ -417,7 +439,9 @@ get_food:
 void 
 endit ()
 {
+#ifdef FLUTTER
     rogue_running = FALSE;
+#endif
     fatal("Ok, if you want to exit that badly, I'll have to allow it\n");
 }
 

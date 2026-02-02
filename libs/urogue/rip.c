@@ -224,9 +224,12 @@ death (int monst)
 		    printw("    %s\n", msgbuf[(msg_index+i)%10]);
 	}
     }
-
+#ifdef FLUTTER
+    playing = FALSE;
+#else
     move(LINES-1, 0);
     idenpack();
+#endif
     refresh();
     score(pstats.s_exp, KILLED, monst);
     exit(0);
@@ -240,10 +243,9 @@ death (int monst)
 void 
 score (long amount, int flags, int monst)
 {
-#ifdef __ANDROID__
-	    mvaddstr(LINES - 1, 0, morestr);
-	    refresh();
-	    wait_for(0);
+#ifdef FLUTTER
+    if (flags != CHICKEN)
+	wait_for(0);
 #else
     static struct sc_ent {
 	long sc_score;
@@ -284,8 +286,10 @@ score (long amount, int flags, int monst)
 	noecho();
 	nl();
 	if (flags == KILLED) {
+#ifndef FLUTTER
 	    mvaddstr(LINES - 1, 0, spacemsg);
 	    refresh();
+#endif
 	    wait_for(' ');
 	}
 	showpack(packend);

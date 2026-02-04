@@ -50,17 +50,6 @@ class BoardData extends ChangeNotifier {
   }
 
   void modifyWeaponTiles() {
-    // int MACE = 0;
-    // int SWORD = 1;
-    // int BOW = 2;
-    // int ARROW = 3;
-    // int DAGGER = 4;
-    // int TWOSWORD = 5;
-    // int DART = 6;
-    // int SHIRAKEN = 7;
-    // int SPEAR = 8;
-    // int FLAME = 9;
-
     for (int r = 0; r < 25; r++) {
       for (int c = 0; c < 80; c++) {
         int idx = (r * 80) + c;
@@ -73,18 +62,29 @@ class BoardData extends ChangeNotifier {
 
         int wt = FFIBridge.whatThing(r, c);
         switch (wt) {
-          case 0: // MACE:
+          case 0: // MACE
+          case 21: // CLUB
+          case 25: // HAMMER
+          case 27: // MORNING STAR
             nc = '6';
             break;
-          case 2: // BOW:
+          case 2: // BOW
+          case 7: // SLING
+          case 9: // CROSSBOW
+          case 41: // FOOTBOW
             nc = '4';
             break;
-          case 7: //SHIRAKEN:
-          case 6: // DART:
-          case 3: //ARROW:
+          case 3: // ARROW
+          case 8: // DART
+          case 10: // BOLT
+          case 19: // SILVER ARROW
+          case 42: // FOOTBOW BOLT
             nc = '5';
             break;
-          default: // 1 (sword
+          case 5: // Rock
+            nc = '7';
+            break;
+          default: // 1 sword
             break;
         }
 

@@ -65,7 +65,7 @@ class GameMap extends StatelessWidget {
     }
 
     Offset playerXY =
-        Offset(board.player.x * size.width, board.player.y * size.height);
+        Offset(board.player.x * size.width, (board.player.y - 2) * size.height);
 
     /* Special screens, e.g. inventory, help, options */
     if (!board.hasStats && board.buffer.length >= 3200) {

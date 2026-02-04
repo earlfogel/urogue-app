@@ -669,6 +669,7 @@ do_spell:
 #ifdef FLUTTER
 void reset_player(void)
 {
+    char_type = -1;
     fighting = FALSE;
     running = FALSE;
     foodlev = 1;

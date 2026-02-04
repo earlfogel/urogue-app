@@ -297,25 +297,25 @@ class _GameViewState extends State<GameView> {
 
 	if (s == '!') {
 	    board.useSprites = !board.useSprites;
-/*
 	    if (board.useSprites) {
 	      Provider.of<ThemeProvider>(context, listen: false).darkTheme(context);
+	      board.isDarkTheme = true;
 	    } else {
 	      Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
+	      board.isDarkTheme = !board.isDarkTheme;
 	    }
-*/
 	    s = '';
 	}
 
 	if (s == '@') {
+	  if (!board.useSprites) {
 	    Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
 if (Provider.of<ThemeProvider>(context, listen: false).isDarkTheme(context)) {
-    //print("Dark Theme");
     board.isDarkTheme = true;
 } else {
-    //print("Light Theme");
     board.isDarkTheme = false;
 }
+	  }
 	    s = '';
 	}
 

@@ -105,23 +105,33 @@ class SpriteSheet {
     tilesetMap['4'] = 911; // bow
     tilesetMap['5'] = 912; // arrows(darts)
     tilesetMap['6'] = 908; // mace
+    tilesetMap['7'] = 756; // rock
     tilesetMap['8'] = 905; // spear
 
     tilesetMap['+'] = 534; // door
-    tilesetMap['['] = 626; // pool
-    tilesetMap['"'] = 627; // poison pool
+    tilesetMap['['] = 626; // poison pool
+    tilesetMap['"'] = 627; // shimmering pool
     tilesetMap['%'] = 532; // staircase
 
     tilesetMap[':'] = 822; // food
     tilesetMap['!'] = 845; // potion
-    tilesetMap[']'] = 926; // armor // 913-helmet
+    tilesetMap[']'] = 927; // armor // 913-helmet
     tilesetMap[')'] = 903; // weapon
     tilesetMap['/'] = 983; // wand or staff
     tilesetMap['='] = 929; // ring
     tilesetMap['*'] = 755; // gold
     tilesetMap['?'] = 988; // scroll
-    tilesetMap['^'] = 622; // trap
-    tilesetMap['\$'] = 985; // magic
+    tilesetMap['^'] = 690; // trading post
+    tilesetMap[';'] = 622; // rust trap
+    tilesetMap['>'] = 622; // trap door
+    tilesetMap['{'] = 622; // arrow trap
+    tilesetMap['\$'] = 1124; // sleep trap
+    tilesetMap['}'] = 624; // bear trap
+    tilesetMap['~'] = 632; // teleport trap
+    tilesetMap['`'] = 622; // dart trap
+    tilesetMap['\\'] = 632; // maze trap
+    tilesetMap['<'] = 1114; // fire trap
+    //tilesetMap['\$'] = 985; // magic
     tilesetMap[','] = 930; // amulet
 
     tilesetMap['@'] = 124; // knight
@@ -139,7 +149,7 @@ class SpriteSheet {
     tilesetMap['J'] = 289; // jackal
     tilesetMap['K'] = 346; // kestrel   // colorize
     tilesetMap['L'] = 465; // leprechaun
-    tilesetMap['M'] = 194; // medusa
+    tilesetMap['M'] = 465; // medusa
     tilesetMap['N'] = 408; // nymph
     tilesetMap['O'] = 344; // orc
     tilesetMap['P'] = 409; // phantom
@@ -205,7 +215,11 @@ class SpriteSheet {
     colorMap['/'] = Colors.purpleAccent;
     colorMap[':'] = Colors.purpleAccent;
     colorMap['\$'] = Colors.purpleAccent;
-    colorMap[','] = Colors.yellow;
+    colorMap[','] = Colors.yellow; // artifact
+    colorMap[';'] = Colors.redAccent; // rust trap
+    colorMap['{'] = Colors.yellowAccent; // arrow trap
+    colorMap['`'] = Colors.yellowAccent; // dart trap
+    colorMap['<'] = Colors.yellowAccent; // fire trap
 
     colorMap['^'] = const Color.fromRGBO(0x50, 0xff, 0x55, 1);
     colorMap['%'] = const Color.fromRGBO(0x50, 0xff, 0x55, 1);

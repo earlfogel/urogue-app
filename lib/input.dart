@@ -98,7 +98,7 @@ class _InputListener extends State<InputListener> {
     BoardData board = Provider.of<BoardData>(context, listen: false);
     final pattern = RegExp("[a-zA-Z]");
     var pos;
-    if ("hjkl".contains(cmd)) {
+    if ("hjkl".contains(cmd) && !board.hasMore) {
 	if (cmd == 'h')
 	  pos = board.player.y * 80 + board.player.x - 1;
 	else if (cmd == 'j')

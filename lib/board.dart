@@ -191,7 +191,7 @@ class BoardData extends ChangeNotifier {
           if (c != ' ') {
             Color clr = sheet.colorMap[c] ?? defaultColor;
 	    if (!isDarkTheme) {
-		if (c == '@')
+		if (c == '@' || c == '_')
 		    clr = Colors.yellow.shade600;
 	    }
             Cell cell = Cell()
@@ -201,7 +201,7 @@ class BoardData extends ChangeNotifier {
               ..sprite = sheet.tilesetMap[c] ?? 0
               ..color = clr;
             cells.add(cell);
-            if (c == '@') {
+            if (c == '@' || c == '_') {
               player = cell;
             }
           }

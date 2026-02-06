@@ -94,6 +94,7 @@ class SpriteSheet {
   void initialize() async {
     tilesetMap['.'] = 525; // floor
     tilesetMap['#'] = 526; // floor path
+    //tilesetMap['&'] = 527; // zap trail
     tilesetMap['-'] = 562; //522; // wall
     tilesetMap['|'] = 563; //522; // wall
 
@@ -117,24 +118,26 @@ class SpriteSheet {
     tilesetMap['!'] = 845; // potion
     tilesetMap[']'] = 927; // armor // 913-helmet
     tilesetMap[')'] = 903; // weapon
+    tilesetMap['('] = 689; // monster lair
     tilesetMap['/'] = 983; // wand or staff
     tilesetMap['='] = 929; // ring
     tilesetMap['*'] = 755; // gold
     tilesetMap['?'] = 988; // scroll
     tilesetMap['^'] = 690; // trading post
-    tilesetMap[';'] = 622; // rust trap
+    tilesetMap[';'] = 626; // rust trap
     tilesetMap['>'] = 622; // trap door
     tilesetMap['{'] = 622; // arrow trap
     tilesetMap['\$'] = 1124; // sleep trap
     tilesetMap['}'] = 624; // bear trap
-    tilesetMap['~'] = 632; // teleport trap
+    tilesetMap['~'] = 633; // teleport trap
     tilesetMap['`'] = 622; // dart trap
     tilesetMap['\\'] = 632; // maze trap
     tilesetMap['<'] = 1114; // fire trap
     //tilesetMap['\$'] = 985; // magic
     tilesetMap[','] = 930; // amulet
 
-    tilesetMap['@'] = 124; // knight
+    tilesetMap['@'] = 124; // player
+    tilesetMap['_'] = 124; // invisible player
 
     // monsters
     tilesetMap['A'] = 287; // aquator
@@ -199,7 +202,7 @@ class SpriteSheet {
 
     colorMap['*'] = Colors.yellow;
 
-    for (int i = 65; i <= 65 + 26; i++) {
+    for (int i = 65; i < 65 + 26; i++) {
       colorMap[String.fromCharCode(i)] = Colors.red;
     }
 
@@ -220,6 +223,7 @@ class SpriteSheet {
     colorMap['{'] = Colors.yellowAccent; // arrow trap
     colorMap['`'] = Colors.yellowAccent; // dart trap
     colorMap['<'] = Colors.yellowAccent; // fire trap
+    colorMap['['] = Colors.yellowAccent; // poison pool
 
     colorMap['^'] = const Color.fromRGBO(0x50, 0xff, 0x55, 1);
     colorMap['%'] = const Color.fromRGBO(0x50, 0xff, 0x55, 1);
@@ -233,6 +237,7 @@ class SpriteSheet {
     colorMap['3'] = colorMap['-'] ?? Colors.white;
 
     colorMap['@'] = const Color.fromRGBO(0xff, 0xff, 0xaa, 1);
+    colorMap['_'] = Colors.grey;
 
     image = await loadImageAsset('assets/Scroll-o-Sprites.png');
   }

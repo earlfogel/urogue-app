@@ -841,7 +841,8 @@ shoot_bolt (struct thing *shooter, coord start, coord dir, bool get_points,
 
 		if (y>BOLT_LENGTH-5 && !bounced) {
 		    bounced = TRUE;
-		    msg("The %s bounces!", name);
+		    if (!fighting)
+			msg("The %s bounces!", name);
 		}
 		y--;
 		break;
@@ -1044,6 +1045,12 @@ at_hero:
 		    else if (!fighting)
 			msg("The %s whizzes by you.", name);
 		}
+#ifdef FLUTTER
+if (ch == '.')
+    dirch = '#';
+else
+    dirch = '.';
+#endif
 		mvwaddch(cw, pos.y, pos.x, dirch);
 		draw(cw);
 	}

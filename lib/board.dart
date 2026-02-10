@@ -17,6 +17,7 @@ class BoardData extends ChangeNotifier {
   bool hasStats = false;
   bool useSprites = false;
   bool hasRip = false;
+  //bool hasDir = false;
   bool isDarkTheme = false;
   Map<String, String> stats = {};
   List<Cell> cells = [];
@@ -146,6 +147,7 @@ class BoardData extends ChangeNotifier {
     // parse the message
     message = getLine(0).trim();
     hasMore = buffer.contains('--More--');
+    //hasDir = buffer.contains('Which direction?');
     //if (buffer.contains('Press space')) hasMore = true;
     hasStats = false;
 
@@ -161,6 +163,10 @@ class BoardData extends ChangeNotifier {
     for (final m in matches) {
       var g = m.groups([2, 3]);
       if (g.length == 2) {
+	RegExp statpat = RegExp(r'^([0-9]+)/([0-9]+)$');
+	var match = statpat.firstMatch(g[1] ?? '-');
+	if (match != null && match![1] == match![2])	// e.g. Hp: 18/18
+	  g[1] = match[1] ?? ' ';		// becomes Hp: 18
         stats[g[0] ?? '-'] = g[1] ?? '';
       }
       hasStats = true;

@@ -262,9 +262,9 @@ status (bool display)
 	    stat_ptr->s_carry/10);
     }
 #ifdef FLUTTER
-	sprintf(buf, "Int:%d Str:%d Wis:%d Dxt:%d",
-	    stat_ptr->s_intel, stat_ptr->s_str,
-	    stat_ptr->s_wisdom,stat_ptr->s_dext);
+	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d",
+	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
+	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext);
 #endif
 
     /* Update first line status */
@@ -329,8 +329,8 @@ line_two:
 	    (health_state != NULL)? health_state:
 		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
 #ifdef FLUTTER
-	sprintf(buf, "Lvl:%d Hp:%*d Ac:%d Exp:%d Player:%s",
-	    level, hpwidth, stat_ptr->s_hpt,
+	sprintf(buf, "Lvl:%d Hp:%*d/%*d Ac:%d Exp:%d Player:%s",
+	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
 		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
 	    stat_ptr->s_lvl,

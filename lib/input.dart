@@ -92,7 +92,7 @@ class _InputListener extends State<InputListener> {
   }
 
   /*
-   * Is the player about to longPress or doubleTap into a monster?
+   * Is the player about to longPress into a monster?
    */
   bool hasMonst(String cmd) {
     BoardData board = Provider.of<BoardData>(context, listen: false);
@@ -112,21 +112,33 @@ class _InputListener extends State<InputListener> {
 	if (pattern.hasMatch(c))
 	  return true;
     }
-
     return false;
   }
 
+  int delay = 500;
+
   void LongPressAction(InputTool t) {
+    BoardData board = Provider.of<BoardData>(context, listen: false);
     if (_isPressed) {
-      if (hasMonst(t.cmd))
-          widget.onKeyDown?.call('f');
-      else if ("hjkl".contains(t.cmd))
-	  widget.onKeyDown?.call(t.cmd.toUpperCase());
-      else
+      if ("hjkl".contains(t.cmd)) {
+	if (board.hasMore)
+	  widget.onKeyDown?.call(' ');
+	else if (hasMonst(t.cmd)) {
+	  if (delay > 250)
+	    delay -= 50; // speed up long fights
+	  widget.onKeyDown?.call(t.cmd.toUpperCase());  // Fight
+	} else if (delay < 300) // a long fight just ended
+	  widget.onKeyDown?.call(t.cmd);
+	else
+	  widget.onKeyDown?.call(t.cmd.toUpperCase());  // Run
+      } else {
 	widget.onKeyDown?.call(t.cmd);
-      t.onPressed?.call();
+      }
+      if (!hasMonst(t.cmd))
+	delay = 500;  // reset after a fight
+      //t.onPressed?.call();
       if (_isPressed) {
-	Future.delayed(Duration(milliseconds: 700), () {
+	Future.delayed(Duration(milliseconds: delay), () {
 	  if (_isPressed)
 	    LongPressAction(t);
 	});
@@ -177,19 +189,24 @@ class _InputListener extends State<InputListener> {
 		    //tooltip: t.title,
                     onPressed: () {
 		      if (t.cmd.length > 0) {
-			widget.onKeyDown?.call(t.cmd);
+			if (board.hasMore)
+			  widget.onKeyDown?.call(' ');
+			else
+			  widget.onKeyDown?.call(t.cmd);
 		      }
 		      t.onPressed?.call();
                     },
 		    ),
                     onLongPress: () {
 		      _isPressed = true;
+		      delay = 500;
 		      LongPressAction(t);
                     },
                     onDoubleTap: () {
-		      if (hasMonst(t.cmd))
-			  widget.onKeyDown?.call('F');
-		      else if (t.cmd == 'h')
+//		      if (hasMonst(t.cmd))
+//			  widget.onKeyDown?.call('f');
+//		      else
+		      if (t.cmd == 'h')
 			widget.onKeyDown?.call(String.fromCharCode(8));
 		      else if (t.cmd == 'j')
 			widget.onKeyDown?.call(String.fromCharCode(10));
@@ -202,12 +219,14 @@ class _InputListener extends State<InputListener> {
                     onLongPressEnd: (details) {
                       _isPressed = false;
                     },
+/*
                     onTapUp: (details) {
                       _isPressed = false;
                     },
                     onTapCancel: () {
                       _isPressed = false;
                     },
+*/
 		  )
                   ))
             ]))

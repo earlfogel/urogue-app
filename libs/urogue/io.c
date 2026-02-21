@@ -262,9 +262,10 @@ status (bool display)
 	    stat_ptr->s_carry/10);
     }
 #ifdef FLUTTER
-	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d",
+	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pack:%d%%",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
-	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext);
+	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
+	    (stat_ptr->s_pack * 100)/ stat_ptr->s_carry);
 #endif
 
     /* Update first line status */

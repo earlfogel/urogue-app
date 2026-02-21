@@ -8,6 +8,8 @@ import 'input.dart';
 import 'sprites.dart';
 import 'ffibridge.dart';
 
+bool lessStats = false;
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -62,6 +64,16 @@ class GameMap extends StatelessWidget {
 	size = Size(12, 16);
 	if (Platform.isAndroid && board.hasStats)
 	    size = Size(14,18);
+    }
+
+    // adjust stats for narrow screens
+    if (board.hasStats) {
+      if (Platform.isAndroid && screen.width > screen.height)
+	lessStats = false;
+      else if (screen.width / size.width > 80)
+	lessStats = false;
+      else
+	lessStats = true;
     }
 
     Offset playerXY =
@@ -152,6 +164,9 @@ class _GameViewState extends State<GameView> {
         fontWeight: FontWeight.bold);
     List<Widget> stats = [];
     for (final k in board.stats.keys) {
+      // adjust stats for narrow screens
+      if (k == 'Pack' && lessStats == true)
+	continue;
       String v = board.stats[k] ?? '';
       if (stats.isNotEmpty) {
         stats.add(Expanded(child: Container()));

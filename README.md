@@ -32,7 +32,7 @@ For more information, see my [urogue github repository](https://github.com/earlf
 - fix: don't duplicate daemons on restart from tombstone screen
 - fix: add escape icon to tombstone screen
 - fix: rare bug setting SROGUEOPTS options (make boolean options real booleans)
-- fix crash when using sprites
+- fix: crash when using sprites
 - fix: tombstone screen
 - fix: only show player stats on screens where rogue shows them
 - fix: modernize urogue code to use function prototypes

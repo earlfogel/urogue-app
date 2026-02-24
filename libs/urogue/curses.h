@@ -1,7 +1,29 @@
 /*
- * This is a hack so flutter uses the included pdcurses
+ * This is a hack,  pure and simple to allow for
+ * tty magic in BSD unix (BSD4)
+ *
+ * I basically need to have all calls that change the tty state
+ * to pass though my hands (in sys_dep.c).
  */
 
 
-#include <curses.h>
+#ifdef _WIN32
+#   define PDC_WIDE 1
+#   define PDC_NCMOUSE 1
+#   include <pdcurses.h>
+#else
+#   include <curses.h>
+#   ifndef FLUTTER
+#       ifdef MOUSE
+#           ifndef PDCURSES
+        	int my_wgetch(WINDOW *);
+#               define wgetch(win) my_wgetch(win)
+#           endif /* PDCURSES */
+#       endif /* MOUSE */
+#       ifdef __clang__
+#           undef mvwinch
+#           define mvwinch(win,y,x)	(char) (wmove((win),(y),(x)) == ERR ? NCURSES_CAST(chtype, ERR) : winch(win))
+#       endif /* __clang__ */
+#   endif /* !FLUTTER */
+#endif /* !_WIN32 */
 

@@ -259,19 +259,13 @@ puta_player (int arm, int wpt, int hpadd, int dmadd)
 	    pstats.s_hpt );
 	mvwaddstr(hw,5,5,pbuf);
 
-	if (difficulty > 3) {
-	    mvwaddstr(hw,7,5,"-- press any key to continue --");
+	if (flutter || difficulty > 3) {
+	    mvwaddstr(hw,8,5,"-- press any key to continue --");
 	    draw(hw);
-	    wgetch(hw);
+	    (void) wgetch(hw);
 	    return(TRUE);
 	}
 
-#ifdef FLUTTER
-	mvwaddstr(hw,8,5,"-- press any key to continue --");
-	draw(hw);
-	(void) wgetch(hw);
-	return(TRUE);
-#endif
 	mvwaddstr(hw,0,0,"Would you like to re-roll the character?");
 	draw(hw);
 	if(wgetch(hw) == 'y')

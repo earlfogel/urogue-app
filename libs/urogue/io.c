@@ -79,11 +79,9 @@ endmsg ()
 	wmove(cw, 0, mpos);
 	waddnstr(cw, morestr, COLS - mpos);
 	draw(cw);
-#ifndef FLUTTER
-	if (pstats.s_hpt < max_stats.s_hpt/5)
+	if (pstats.s_hpt < max_stats.s_hpt/5 && !flutter)
 	    wait_for(' ');  /* rogue should be more careful when injured */
 	else
-#endif
 	    wait_for(0);
     }
     mvwaddstr(cw, 0, 0, mbuf);
@@ -248,25 +246,18 @@ status (bool display)
     first_line = TRUE;
     getyx(cw, oy, ox);
 
-    if (COLS >= 80) {
+    if (COLS >= 80 && !flutter) {
 	sprintf(buf, "Int:%d(%d)  Str:%d(%d)  Wis:%d(%d)  Dxt:%d(%d)  Const:%d(%d)  Carry:%d(%d)",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
 	    stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
 	    stat_ptr->s_carry/10);
     } else {
-	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pack:%d/%d",
-	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
-	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
-	    stat_ptr->s_pack/10,
-	    stat_ptr->s_carry/10);
-    }
-#ifdef FLUTTER
 	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pack:%d%%",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
 	    (stat_ptr->s_pack * 100)/ stat_ptr->s_carry);
-#endif
+    }
 
     /* Update first line status */
     s_intel = stat_ptr->s_intel;
@@ -322,22 +313,22 @@ line_two:
 	    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)],
 	    (health_state != NULL)? health_state: "");
     else
-	sprintf(buf, "Lvl:%d Hp:%*d/%*d Ac:%d Exp:%d  %s",
-	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+	sprintf(buf, "Lvl:%d Au:%d Hp:%*d/%*d Ac:%d Exp:%d  %s",
+	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
 		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
 	    stat_ptr->s_lvl,
 	    (health_state != NULL)? health_state:
 		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
-#ifdef FLUTTER
-	sprintf(buf, "Lvl:%d Hp:%*d/%*d Ac:%d Exp:%d Player:%s",
-	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+    if (flutter) {
+	sprintf(buf, "Lvl:%d Au:%d Hp:%*d/%*d Ac:%d Exp:%d Player:%s",
+	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
 		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
 	    stat_ptr->s_lvl,
 	    (health_state != NULL)? health_state:
 		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
-#endif
+    }
 
     /*
      * Save old status

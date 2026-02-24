@@ -165,7 +165,7 @@ class _GameViewState extends State<GameView> {
     List<Widget> stats = [];
     for (final k in board.stats.keys) {
       // adjust stats for narrow screens
-      if (k == 'Pack' && lessStats == true)
+      if ((k == 'Pack' || k == 'Au') && lessStats == true)
 	continue;
       String v = board.stats[k] ?? '';
       if (stats.isNotEmpty) {

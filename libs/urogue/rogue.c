@@ -57,6 +57,7 @@ int maxpack = MAXPACK;
 int auth_or[MAXAUTH];
 int searching_run = 0;
 int save_ch = ' ';
+int nlives = 1;				/* number of lives we've used so far */
 char curpurch[15];			/* name of item ready to buy */
 char PLAYER = VPLAYER;			/* what the player looks like */
 char take;				/* Thing the rogue is taking */
@@ -112,6 +113,11 @@ bool game_over = FALSE;
 bool serious_fight = FALSE;
 #ifdef MOUSE
 bool mousemove = FALSE;
+#endif
+#ifdef FLUTTER
+bool flutter = TRUE;			/* code built to run as a flutter app */
+#else
+bool flutter = FALSE;			/* code built normally */
 #endif
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */

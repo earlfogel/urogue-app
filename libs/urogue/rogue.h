@@ -997,6 +997,7 @@ extern int maxpack;			/* max items that fit in pack */
 extern int nummonst;			/* number of types of monsters */
 extern int searching_run;		/* alternately search and step */
 extern int save_ch;			/* saved command for next turn */
+extern int nlives;			/* number of lives we've used so far */
 extern char take;			/* Thing the rogue is taking */
 extern char prbuf[];			/* Buffer for sprintfs */
 extern char outbuf[];			/* Output buffer for stdout */
@@ -1055,6 +1056,7 @@ extern bool serious_fight;		/* fight longer and harder */
 #ifdef MOUSE
 extern bool mousemove;
 #endif
+extern bool flutter;			/* code built to run as a flutter app */
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */
 extern char *spacemsg;

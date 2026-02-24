@@ -41,13 +41,6 @@ For more information, see my [urogue github repository](https://github.com/earlf
 - fix: tombstone screen
 - fix: only show player stats on screens where rogue shows them
 - fix: modernize urogue code to use function prototypes
-
-## To Do
-
-- find a better tileset (or two) for the graphical view
-- support pinch zoom and drag gestures to zoom/unzoom and move visible board
-- use joystick tool instead of four arrow icons for movement
-  (or tap on board to move to that spot)
-- show score at end of game
-- make help, genocide and makemon single column when screen is narrow
+- include pack weight and gold in stats if screen is wide enough
+- Silmaril plus phasing lets you run through walls
 

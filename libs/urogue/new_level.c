@@ -218,6 +218,10 @@ new_level (
 	}
     }
 
+#ifdef FLUTTER
+    status(TRUE);
+#endif
+
     if (ISWEARING(R_ADORNMENT) || 
 		(cur_armor != NULL && cur_armor->o_which == MITHRIL)) {
 	bool greed = FALSE;
@@ -248,6 +252,9 @@ new_level (
 
     wmove(cw, hero.y, hero.x);
     waddch(cw, PLAYER);
+#ifdef FLUTTER
+    if (levtype != POSTLEV)
+#endif
     status(TRUE);
 
     if (autosave == TRUE

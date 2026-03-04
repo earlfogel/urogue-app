@@ -304,7 +304,7 @@ line_two:
 	for (hpwidth = 0; temp; hpwidth++)
 	    temp /= 10;
     }
-    if (COLS >= 80)
+    if (COLS >= 80 && !flutter)
 	sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s %s",
 	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
@@ -312,20 +312,15 @@ line_two:
 	    stat_ptr->s_lvl, stat_ptr->s_exp,
 	    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)],
 	    (health_state != NULL)? health_state: "");
-    else
-	sprintf(buf, "Lvl:%d Au:%d Hp:%*d/%*d Ac:%d Exp:%d  %s",
+    else {
+	sprintf(buf, "Lvl:%d Au:%d Hp:%*d/%*d Ac:%d Exp:%d ",
 	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
 		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
-	    stat_ptr->s_lvl,
-	    (health_state != NULL)? health_state:
-		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
-    if (flutter) {
-	sprintf(buf, "Lvl:%d Au:%d Hp:%*d/%*d Ac:%d Exp:%d Player:%s",
-	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
-	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
-		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
-	    stat_ptr->s_lvl,
+	    stat_ptr->s_lvl);
+	if (flutter)
+	    sprintf(buf+strlen(buf), " Player:");
+	sprintf(buf+strlen(buf), "%s",
 	    (health_state != NULL)? health_state:
 		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
     }
@@ -421,9 +416,15 @@ get_health()
     } else if (on(player, SUPEREAT) || on(player, POWEREAT)) {
 	health_state = "  Warm";
     } else if (cur_armor == NULL) {
-	health_state = "  Armor?";
+	if (flutter)
+	    health_state = "  Armor?";
+	else
+	    health_state = "  No Armor";
     } else if (cur_weapon == NULL) {
-	health_state = "  Weapon?";
+	if (flutter)
+	    health_state = "  Weapon?";
+	else
+	    health_state = "  No Weapon";
     } else if (pstats.s_hpt < max_stats.s_hpt/5) {
 	health_state = " Depleted";
 #ifdef EARL

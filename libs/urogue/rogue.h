@@ -1456,6 +1456,7 @@ char *ring_num(struct object *obj);
 int ring_value(int type);
 int ring_blessed(int type);
 int ring_cursed(int type);
+int is_ring_on(struct object *obj);
 /* rip.c */
 void death(int monst);
 void score(long amount, int flags, int monst);
@@ -1484,7 +1485,6 @@ int getword(int fd);
 /* scrolls.c */
 void read_scroll(int which, bool blessed);
 struct thing *creat_mons(struct thing *person, int monster, bool report);
-int is_r_on(struct object *obj);
 /* sticks.c */
 void fix_stick(struct object *cur);
 void do_zap(bool gotdir, int which, bool blessed);

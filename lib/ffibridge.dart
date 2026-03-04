@@ -38,6 +38,14 @@ class FFIBridge {
         .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('whatThing');
     whatThing = _whatThing.asFunction<int Function(int, int)>();
 
+    final _whichMonst = nativeApiLib
+        .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('whichMonst');
+    whichMonst = _whichMonst.asFunction<int Function(int, int)>();
+
+    final _se = nativeApiLib
+        .lookup<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>('setEnv');
+    _setEnv = _se.asFunction<void Function(Pointer<Utf8>, Pointer<Utf8>)>();
+
     return true;
   }
 
@@ -49,6 +57,8 @@ class FFIBridge {
   static late Function _getScreenBuffer;
   static late Function _pushKey;
   static late Function whatThing;
+  static late Function whichMonst;
+  static late Function _setEnv;
 
   static String capitalize(String str) {
     final _str = str.toNativeUtf8();
@@ -67,4 +77,13 @@ class FFIBridge {
     Pointer<Utf8> res = _getScreenBuffer();
     return res.toDartString();
   }
+
+  static void setEnv(String name, String value) {
+    final _name = name.toNativeUtf8();
+    final _value = value.toNativeUtf8();
+    _setEnv(_name, _value);
+    calloc.free(_name);
+    calloc.free(_value);
+  }
+
 }

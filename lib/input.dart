@@ -98,7 +98,10 @@ class _InputListener extends State<InputListener> {
     BoardData board = Provider.of<BoardData>(context, listen: false);
     final pattern = RegExp("[a-zA-Z]");
     var pos;
-    if ("hjkl".contains(cmd) && !board.hasMore) {
+    String c;
+    if (board.hasMore)
+	return false;
+    if ("hjkl".contains(cmd)) { // check direction of travel
 	if (cmd == 'h')
 	  pos = board.player.y * 80 + board.player.x - 1;
 	else if (cmd == 'j')
@@ -108,7 +111,24 @@ class _InputListener extends State<InputListener> {
 	else if (cmd == 'l')
 	  pos = board.player.y * 80 + board.player.x + 1;
 
-	String c = board.buffer[pos];
+	c = board.buffer[pos];
+	if (pattern.hasMatch(c))
+	  return true;
+    } else {  // check all directions
+	pos = board.player.y * 80 + board.player.x - 1;
+	c = board.buffer[pos];
+	if (pattern.hasMatch(c))
+	  return true;
+	  pos = board.player.y * 80 + board.player.x + 80;
+	c = board.buffer[pos];
+	if (pattern.hasMatch(c))
+	  return true;
+	  pos = board.player.y * 80 + board.player.x - 80;
+	c = board.buffer[pos];
+	if (pattern.hasMatch(c))
+	  return true;
+	  pos = board.player.y * 80 + board.player.x + 1;
+	c = board.buffer[pos];
 	if (pattern.hasMatch(c))
 	  return true;
     }
@@ -134,8 +154,14 @@ class _InputListener extends State<InputListener> {
       } else {
 	widget.onKeyDown?.call(t.cmd);
       }
-      if (!hasMonst(t.cmd))
+      if (t.cmd == '.') {  // Rest
+	if (hasMonst(t.cmd))
+	  delay = 500;  // reset if a monster arrives
+	else
+	  delay = 200; // speed up long rests
+      } else if (!hasMonst(t.cmd)) {
 	delay = 500;  // reset after a fight
+      }
       //t.onPressed?.call();
       if (_isPressed) {
 	Future.delayed(Duration(milliseconds: delay), () {
@@ -191,6 +217,8 @@ class _InputListener extends State<InputListener> {
 		      if (t.cmd.length > 0) {
 			if (board.hasMore)
 			  widget.onKeyDown?.call(' ');
+			else if (t.cmd == '.')
+			  widget.onKeyDown?.call('s');  // search instead
 			else
 			  widget.onKeyDown?.call(t.cmd);
 		      }

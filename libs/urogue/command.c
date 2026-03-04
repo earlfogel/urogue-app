@@ -483,8 +483,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    if (decrement)
 				msg_index = (msg_index + 9) % 10;
 		}
-#ifndef FLUTTER
 		when 'S' : 
+#ifdef FLUTTER
+		    msg("HOME=%s", home);
+#else
 		    after = FALSE;
 		    if (save_game())
 		    {

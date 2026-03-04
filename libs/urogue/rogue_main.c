@@ -64,6 +64,19 @@ int what_thing(int y, int x) {
     }
     return 0;
 }
+
+int which_monst(int y, int x) {
+    struct linked_list *item;
+    struct thing *th;
+    item = find_mons(y, x);
+    if (item != NULL) {
+	th = (struct thing *) ldata(item);
+	if (th != NULL) {
+	    return th->t_index;
+	}
+    }
+    return 0;
+}
 #endif
 
 int 

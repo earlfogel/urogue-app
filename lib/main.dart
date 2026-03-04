@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'board.dart';
 import 'input.dart';
@@ -10,12 +11,17 @@ import 'ffibridge.dart';
 
 bool lessStats = false;
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // get path to the application directory where we can store files
+  final directory = await getApplicationDocumentsDirectory();
+  print("directory: ${directory.path}");
 
   FFIBridge.initialize();
   FFIBridge.initApp();
-  FFIBridge.pushKey(' ');
+  //FFIBridge.pushKey(' ');
+  FFIBridge.setEnv('HOME', directory.path);
 
   BoardData board = BoardData();
 
@@ -28,6 +34,7 @@ void main() {
 
   runApp(app);
 }
+
 
 class Game extends StatelessWidget {
   const Game({Key? key}) : super(key: key);
@@ -70,7 +77,7 @@ class GameMap extends StatelessWidget {
     if (board.hasStats) {
       if (Platform.isAndroid && screen.width > screen.height)
 	lessStats = false;
-      else if (screen.width / size.width > 80)
+      else if (screen.width / 12 > 80)
 	lessStats = false;
       else
 	lessStats = true;
@@ -121,7 +128,7 @@ class GameMap extends StatelessWidget {
 	map.add(Positioned(
           top: center.dy + (size.height * (c.y - 2)),
           left: center.dx + (size.width * c.x),
-          child: (board.hasStats && board.useSprites && (Sprite(cell: c) != null))?
+          child: (board.hasStats && board.useSprites)?
 	    Sprite(cell: c):
 	    Text(c.data, style: TextStyle(fontSize: size.width))));
     }
@@ -211,6 +218,7 @@ class _GameViewState extends State<GameView> {
     return Scaffold(
         body: OrientationBuilder(
         builder: (context, orientation) {
+	    board.orientationChanged = true;
 	    Future.delayed(const Duration(milliseconds: 50), _updateScreen);
 	    return SafeArea(
 	    child: InputListener(
@@ -232,6 +240,8 @@ class _GameViewState extends State<GameView> {
           bool control = false,
           bool softKeyboard = false}) {
         int k = keyId;
+//	if (HardwareKeyboard.instance.isShiftPressed && !shift)  // shouldn't happen, but ...
+//	    shift = true;
         if (
 	    (k >= LogicalKeyboardKey.keyA.keyId &&
 		k <= LogicalKeyboardKey.keyZ.keyId) ||
@@ -245,26 +255,28 @@ class _GameViewState extends State<GameView> {
 	      key = String.fromCharCode(97 + k - LogicalKeyboardKey.keyA.keyId);
 	  }
         }
-	if (shift && k == LogicalKeyboardKey.digit1.keyId)
-	    key = '!';
-	if (shift && k == LogicalKeyboardKey.digit2.keyId)
-	    key = '@';
-	if (shift && k == LogicalKeyboardKey.digit3.keyId)
-	    key = '#';
-	if (shift && k == LogicalKeyboardKey.digit4.keyId)
-	    key = '\$';
-	if (shift && k == LogicalKeyboardKey.digit5.keyId)
-	    key = '%';
-	if (shift && k == LogicalKeyboardKey.digit6.keyId)
-	    key = '^';
-	if (shift && k == LogicalKeyboardKey.digit7.keyId)
-	    key = '&';
-	if (shift && k == LogicalKeyboardKey.digit8.keyId)
-	    key = '*';
-	if (shift && k == LogicalKeyboardKey.digit9.keyId)
-	    key = '(';
-	if (shift && k == LogicalKeyboardKey.digit0.keyId)
-	    key = ')';
+	if (shift) {
+	    if      (k == LogicalKeyboardKey.digit1.keyId)
+		key = '!';
+	    else if (k == LogicalKeyboardKey.digit2.keyId)
+		key = '@';
+	    else if (k == LogicalKeyboardKey.digit3.keyId)
+		key = '#';
+	    else if (k == LogicalKeyboardKey.digit4.keyId)
+		key = '\$';
+	    else if (k == LogicalKeyboardKey.digit5.keyId)
+		key = '%';
+	    else if (k == LogicalKeyboardKey.digit6.keyId)
+		key = '^';
+	    else if (k == LogicalKeyboardKey.digit7.keyId)
+		key = '&';
+	    else if (k == LogicalKeyboardKey.digit8.keyId)
+		key = '*';
+	    else if (k == LogicalKeyboardKey.digit9.keyId)
+		key = '(';
+	    else if (k == LogicalKeyboardKey.digit0.keyId)
+		key = ')';
+	}
 
         String s = key;
 
@@ -325,11 +337,12 @@ class _GameViewState extends State<GameView> {
 	if (s == '@') {
 	  if (!board.useSprites) {
 	    Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
-if (Provider.of<ThemeProvider>(context, listen: false).isDarkTheme(context)) {
-    board.isDarkTheme = true;
-} else {
-    board.isDarkTheme = false;
-}
+	    board.isDarkTheme = !board.isDarkTheme;
+//if (Provider.of<ThemeProvider>(context, listen: false).isDarkTheme(context)) {
+//    board.isDarkTheme = true;
+//} else {
+//    board.isDarkTheme = false;
+//}
 	  }
 	    s = '';
 	}
@@ -388,3 +401,4 @@ class ThemeProvider with ChangeNotifier {
     }
   }
 }
+

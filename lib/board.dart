@@ -19,6 +19,11 @@ class BoardData extends ChangeNotifier {
   bool hasRip = false;
   //bool hasDir = false;
   bool isDarkTheme = false;
+  String oldBuffer = '';
+  bool oldUseSprites = false;
+  bool oldIsDarkTheme = false;
+  bool orientationChanged = false;
+  var defaultColor = Colors.white;
   Map<String, String> stats = {};
   List<Cell> cells = [];
 
@@ -138,6 +143,16 @@ class BoardData extends ChangeNotifier {
   }
 
   void parseBuffer(String buf) {
+    if (buf == oldBuffer && useSprites == oldUseSprites && isDarkTheme == oldIsDarkTheme
+	&& !orientationChanged)
+	return;  // nothing changed
+    else {
+	oldBuffer = buf;
+	oldUseSprites = useSprites;
+	oldIsDarkTheme = isDarkTheme;
+	orientationChanged = false;
+    }
+
     SpriteSheet sheet = SpriteSheet.instance();
     buffer = buf;
 
@@ -176,7 +191,7 @@ class BoardData extends ChangeNotifier {
     cells.clear();
 
     // change color based on theme
-    var defaultColor = Colors.white;
+    defaultColor = Colors.white;
     if (!isDarkTheme) {
 	defaultColor = Colors.black;
     }
@@ -191,6 +206,7 @@ class BoardData extends ChangeNotifier {
       // end before 23 - skips the stats
       int start = (hasStats)? 1: 0;
       int end = (hasStats)? 23: 25;
+      final isAlpha = RegExp("[a-zA-Z]");
       for (int i = start; i < end; i++) {
         for (int j = 0; j < 80; j++) {
           String c = buffer[i * 80 + j];
@@ -206,6 +222,19 @@ class BoardData extends ChangeNotifier {
               ..y = i
               ..sprite = sheet.tilesetMap[c] ?? 0
               ..color = clr;
+	    if (useSprites && hasStats && isAlpha.hasMatch(c)) {
+		int y = i;
+		int x = j;
+		int mnum = FFIBridge.whichMonst(y, x);
+		if (mnum > 0) {
+		    // show the right tile
+		    cell.sprite = sheet.monstTile[mnum];
+		    cell.color = sheet.monstStyle[mnum];
+		} else {
+		    cell.sprite = 0;
+		    //cell.color = defaultColor;
+		}
+	    }
             cells.add(cell);
             if (c == '@' || c == '_') {
               player = cell;

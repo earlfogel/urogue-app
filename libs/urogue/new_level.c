@@ -259,6 +259,7 @@ new_level (
 
     if (autosave == TRUE
 	&& levtype == NORMLEV
+	&& max_level > 1
 	&& hungry_state < F_FAINT
 	&& pstats.s_hpt > max_stats.s_hpt / 2
 	&& off(player, HASINFEST)

@@ -369,6 +369,8 @@ get_health()
 	    health_state = "  Sick!!!";
 	else
 	    health_state = " Sick!";
+    } else if (pstats.s_hpt < max_stats.s_hpt/5) {
+	health_state = " Depleted";
     } else if (on(player, HASDISEASE)) {
 	health_state = "  Sick";
     } else if (on(player, HASITCH)) {
@@ -383,6 +385,8 @@ get_health()
 	health_state = "  Slow";
     } else if (on(player, ISFLEE)) {
 	health_state = "  Terrified";
+    } else if (on(player, ISHUH)) {
+	health_state = "  Confused";
     } else if (pstats.s_intel < 8) {
 	health_state = "  Dim-witted";
     } else if (pstats.s_str < 8) {
@@ -403,8 +407,6 @@ get_health()
     } else if (on(player, CANINWALL) && find_slot(FUSE, FUSE_UNPHASE) == NULL) {
 	health_state = "  Phasing"; /* permanent phasing */
 #endif
-    } else if (on(player, ISHUH)) {
-	health_state = "  Confused";
     } else if (on(player, ISUNSMELL)) {
 	health_state = "  Unscented";
     } else if (on(player, STUMBLER)) {
@@ -425,8 +427,6 @@ get_health()
 	    health_state = "  Weapon?";
 	else
 	    health_state = "  No Weapon";
-    } else if (pstats.s_hpt < max_stats.s_hpt/5) {
-	health_state = " Depleted";
 #ifdef EARL
     } else if (char_type < 0 || char_type > 3) {
 	health_state = "  bad char_type ";

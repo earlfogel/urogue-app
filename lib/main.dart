@@ -16,12 +16,13 @@ Future<void> main() async {
 
   // get path to the application directory where we can store files
   final directory = await getApplicationDocumentsDirectory();
-  print("directory: ${directory.path}");
+  //print("directory: ${directory.path}");
 
   FFIBridge.initialize();
   FFIBridge.initApp();
   //FFIBridge.pushKey(' ');
   FFIBridge.setEnv('HOME', directory.path);
+  FFIBridge.setEnv('SROGUEOPTS', 'autosave');
 
   BoardData board = BoardData();
 
@@ -75,9 +76,12 @@ class GameMap extends StatelessWidget {
 
     // adjust stats for narrow screens
     if (board.hasStats) {
-      if (Platform.isAndroid && screen.width > screen.height)
-	lessStats = false;
-      else if (screen.width / 12 > 80)
+//      if (Platform.isAndroid && screen.width > screen.height)
+//	lessStats = false;
+//      else if (!Platform.isAndroid && screen.width / 12 > 80)
+//	lessStats = false;
+      double fontSize = (Platform.isAndroid ? 12 : 20);
+      if (screen.width / fontSize > 60)
 	lessStats = false;
       else
 	lessStats = true;
@@ -172,7 +176,7 @@ class _GameViewState extends State<GameView> {
     List<Widget> stats = [];
     for (final k in board.stats.keys) {
       // adjust stats for narrow screens
-      if ((k == 'Pack' || k == 'Au') && lessStats == true)
+      if ((k == 'Pack' || k == 'Au' || k == 'Exp') && lessStats == true)
 	continue;
       String v = board.stats[k] ?? '';
       if (stats.isNotEmpty) {

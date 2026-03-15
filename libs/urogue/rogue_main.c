@@ -117,6 +117,10 @@ rogue_main (int argc, char **argv)
     /* get home from environment */
     if ((env = getenv("HOME")) != NULL)
 	strcpy(home, env);
+#ifdef __ANDROID__
+    else if (strlen(home) < 5)  /* airplane mode */
+	strcpy(home, "/data/user/0/com.example.urogue/app_flutter");
+#endif
     else
 	strcpy(home, ".");
     strcat(home, "/");
@@ -244,6 +248,7 @@ if (rogue_running) {
     after = FALSE;
     count = 0;
     no_command = 0;
+    save_ch = ' ';
     kill_daemon(DAEMON_DOCTOR);
     extinguish_fuse(FUSE_SWANDER);
     kill_daemon(DAEMON_STOMACH);

@@ -15,6 +15,7 @@ class BoardData extends ChangeNotifier {
   String message = '';
   bool hasMore = false;
   bool hasStats = false;
+  bool hasStar = false;
   bool useSprites = false;
   bool hasRip = false;
   //bool hasDir = false;
@@ -162,8 +163,9 @@ class BoardData extends ChangeNotifier {
     // parse the message
     message = getLine(0).trim();
     hasMore = buffer.contains('--More--');
+    hasStar = buffer.contains('* for list');
     //hasDir = buffer.contains('Which direction?');
-    //if (buffer.contains('Press space')) hasMore = true;
+    if (buffer.contains('Press space')) hasMore = true;
     hasStats = false;
 
     // parse status > Level: 1  Gold: 0      Hp: 12(12)  Str: 16(16)  Arm: 4   Exp: 1/0

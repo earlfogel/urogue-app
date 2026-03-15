@@ -217,6 +217,8 @@ class _InputListener extends State<InputListener> {
 		      if (t.cmd.length > 0) {
 			if (board.hasMore)
 			  widget.onKeyDown?.call(' ');
+			else if ("hjkl".contains(t.cmd) && board.hasStar)
+			  widget.onKeyDown?.call('*');
 			else if (t.cmd == '.')
 			  widget.onKeyDown?.call('s');  // search instead
 			else
@@ -247,14 +249,12 @@ class _InputListener extends State<InputListener> {
                     onLongPressEnd: (details) {
                       _isPressed = false;
                     },
-/*
                     onTapUp: (details) {
                       _isPressed = false;
                     },
                     onTapCancel: () {
                       _isPressed = false;
                     },
-*/
 		  )
                   ))
             ]))
@@ -270,6 +270,7 @@ class _InputListener extends State<InputListener> {
                       autofocus: true,
                       maxLines: null,
                       enableInteractiveSelection: false,
+		      //enableSuggestions: false,
                       decoration:
                           const InputDecoration(border: InputBorder.none),
                       controller: controller))

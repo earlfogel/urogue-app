@@ -15,32 +15,13 @@ genre.
 
 For more information, see my [urogue github repository](https://github.com/earlfogel/UltraRogue)
 
-## Changelog
+## Notes
 
-- long-press on arrow icons for shift-movement commands
-- double-tap on arrow icons for ctrl-movement commands
-- long-press on arrow towards monster to 'f'ight
-- double-tap on arrow towards monster to 'F'ight
-- hold down movement, etc. icons to repeat
-- press '@' to switch between light and dark themes (in text view)
-- press '!' to switch between text and graphical views
-- redraw/recenter dungeon after rotating phone
-- avoid overlap with phone notches, camera, etc.
-- improved status display on small screens
-- improved display of screens without map (Inventory, Options, Help, ...)
-- fix: graphical tiles for zap trails
-- fix: graphical tile for invisible player
-- fix: center dungeon around invisible player
-- fix: graphical tiles for secret doors and various traps
-- fix: graphical tiles for lower-case monsters
-- fix: reset dungeon/player/pack/bag on restart from tombstone screen
-- fix: don't duplicate daemons on restart from tombstone screen
-- fix: add escape icon to tombstone screen
-- fix: rare bug setting SROGUEOPTS options (make boolean options real booleans)
-- fix: crash when using sprites
-- fix: tombstone screen
-- fix: only show player stats on screens where rogue shows them
-- fix: modernize urogue code to use function prototypes
-- include pack weight and gold in stats if screen is wide enough
-- Silmaril plus phasing lets you run through walls
+ - hold down arrow (and other) icons to repeat
+ - long-press on arrows for shift-movement commands
+ - double-tap on arrows for ctrl-movement commands
+ - long-press on arrow towards monster to 'f'ight
+ - double-tap on arrow towards monster to 'F'ight
+ - press '@' to switch between light and dark themes (in text view)
+ - press '!' to switch between text and graphical views
 

@@ -38,6 +38,10 @@ class FFIBridge {
         .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('whatThing');
     whatThing = _whatThing.asFunction<int Function(int, int)>();
 
+    final _whichThing = nativeApiLib
+        .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('whichThing');
+    whichThing = _whichThing.asFunction<int Function(int, int)>();
+
     final _whichMonst = nativeApiLib
         .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('whichMonst');
     whichMonst = _whichMonst.asFunction<int Function(int, int)>();
@@ -57,6 +61,7 @@ class FFIBridge {
   static late Function _getScreenBuffer;
   static late Function _pushKey;
   static late Function whatThing;
+  static late Function whichThing;
   static late Function whichMonst;
   static late Function _setEnv;
 

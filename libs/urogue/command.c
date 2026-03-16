@@ -191,7 +191,7 @@ if (ch >= KEY_MIN)
 fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 #endif
 		ch = unarrow(ch);  /* translate arrow keys */
-#ifdef EARL
+#if 0
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
 #endif
@@ -452,8 +452,12 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		when 'v' : after = FALSE;
 			   msg("UltraRogue version %s.",
 				release);
-		when CTRL('R') : after = FALSE;
+		when CTRL('R') :
 #ifdef EARL
+#ifdef FLUTTER
+		case 'X':
+#endif
+		    after = FALSE;
 		    char fname[200];
 		    strcpy(fname, home);
 		    strcat(fname, "rogue.asave");
@@ -472,7 +476,11 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				usleep(50000);
 				wrefresh(cw);
 				touchwin(cw); /* MMMMMMMMMM */
-		when CTRL('P') : {
+		when CTRL('P') :
+#ifdef FLUTTER
+		case '-':
+#endif
+		{
 			    bool decrement = FALSE;
 
 			    after = FALSE; 

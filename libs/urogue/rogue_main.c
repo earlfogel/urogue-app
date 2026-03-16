@@ -52,6 +52,7 @@ int is_rogue_running()
     return rogue_running;
 }
 
+/* find the sub-type of an object (e.g. a healing potion) */
 int what_thing(int y, int x) {
     struct linked_list *item;
     struct object *obj;
@@ -65,6 +66,20 @@ int what_thing(int y, int x) {
     return 0;
 }
 
+/* find the type of an object (e.g. a potion) */
+int which_thing(int y, int x) {
+    struct linked_list *item;
+    struct object *obj;
+    item = find_obj(y, x);
+    if (item != NULL) {
+	obj = (struct object *) ldata(item);
+	if (obj != NULL) {
+	    return obj->o_type;
+	}
+    }
+    return -1;
+}
+
 int which_monst(int y, int x) {
     struct linked_list *item;
     struct thing *th;
@@ -75,7 +90,7 @@ int which_monst(int y, int x) {
 	    return th->t_index;
 	}
     }
-    return 0;
+    return -1;
 }
 #endif
 

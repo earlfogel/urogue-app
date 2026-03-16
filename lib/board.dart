@@ -237,6 +237,22 @@ class BoardData extends ChangeNotifier {
 		    //cell.color = defaultColor;
 		}
 	    }
+	    /* is it a trap or a magical item? */
+	    if (useSprites && hasStats && "<\$>".contains(c)) {
+		int y = i;
+		int x = j;
+		int wt = FFIBridge.whichThing(y, x);
+		if (wt > 0) {
+		    String nc = String.fromCharCode(wt);
+		    cell.sprite = sheet.tilesetMap[nc] ?? 0;
+		    if (c == '<')
+			cell.color = Colors.red;
+		    else if (c == '>')
+			cell.color = Colors.green;
+		    else
+			cell.color = Colors.blue;
+		}
+	    }
             cells.add(cell);
             if (c == '@' || c == '_') {
               player = cell;

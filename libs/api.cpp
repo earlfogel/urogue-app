@@ -20,6 +20,8 @@ void pushKey(int k);
 int rogue_main(int argc, char **argv);
 int is_rogue_running();
 int what_thing(int y, int x);
+int which_thing(int y, int x);
+int which_monst(int y, int x);
 }
 
 pthread_t threadId = 0;
@@ -89,7 +91,7 @@ void pushString(char *key)
         initApp();
         return;
     }
-    printf("%c\n", key[0]);
+    /* printf("%c\n", key[0]); */
     pushKey(key[0]);
 }
 
@@ -98,3 +100,23 @@ int whatThing(int y, int x)
 {
     return what_thing(y, x);
 }
+
+EXPORT
+int whichThing(int y, int x)
+{
+    return which_thing(y, x);
+}
+
+EXPORT
+int whichMonst(int y, int x)
+{
+    return which_monst(y, x);
+}
+
+EXPORT
+void setEnv(char *name, char *value)
+{
+    /* printf("%s = %s\n", name, value); */
+    setenv(name, value, 1);
+}
+

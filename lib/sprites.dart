@@ -157,7 +157,7 @@ class SpriteSheet {
 	Colors.blue,
 	Colors.yellow,
 	Colors.orange,
-	Colors.purple,
+	Colors.brown,
     ];
 
     // set all monsters to default tile and colors
@@ -170,7 +170,7 @@ class SpriteSheet {
     monstTile[2]   = 342; // xvart
     monstTile[3]   = 282; // giant rat
     monstTile[4]   = 289; // jackal
-    monstTile[5]   = 284; // snake
+    monstTile[5]   = 288; // snake
     monstTile[6]   = 342; // kobold
     monstTile[8]   = 342; // gnome
     monstTile[9]   = 130; // halfling
@@ -195,7 +195,7 @@ class SpriteSheet {
     monstTile[44]  = 346; // axe beak
     monstTile[46]  = 284; // giant centipede
     monstTile[47]  = 294; // pegasus
-    monstTile[51]  = 284; // crocodile
+    monstTile[51]  = 288; // crocodile
     monstTile[52]  = 294; // hipogriff
     monstTile[53]  = 289; // giant goat
     monstTile[54]  = 282; // wererat
@@ -203,13 +203,14 @@ class SpriteSheet {
     monstTile[57]  = 402; // ghoul
     monstTile[58]  = 289; // giant hyena
     monstTile[59]  = 687; // huorn
-    monstTile[64]  = 342; // ogre
+    monstTile[64]  = 343; // ogre
     //monstTile[65] = 465; // leprechaun
     monstTile[67]  = 294; // centaur
     monstTile[68]  = 293; // pseudo dragon
     monstTile[69]  = 293; // very young dragon
     monstTile[70]  = 283; // batarang
     monstTile[73]  = 290; // mountain lion
+    monstTile[74]  = 291; // bugbear
     monstTile[75]  = 292; // giant lizard
     monstTile[76]  = 346; // harpy
     monstTile[77]  = 292; // iguanadon
@@ -230,8 +231,10 @@ class SpriteSheet {
     monstTile[105] = 289; // winter wolf
     monstTile[101] = 293; // psuedo-dragon
     monstTile[107] = 290; // lion
+    monstTile[109] = 462; // ochre jelly
     monstTile[119] = 292; // subterranean lizard
     monstTile[121] = 293; // plateosaurus
+    monstTile[127] = 288; // giant crocodile
     monstTile[128] = 346; // griffin
     monstTile[129] = 289; // warg
     monstTile[130] = 294; // hipogriff
@@ -250,6 +253,7 @@ class SpriteSheet {
     monstTile[152] = 285; // stag beetle
     monstTile[155] = 289; // jackalwere
     monstTile[156] = 291; // were bear
+    monstTile[157] = 288; // salamander
     monstTile[158] = 293; // ankylosaurus
     monstTile[161] = 290; // spotted lion
     monstTile[162] = 285; // killer bee
@@ -284,6 +288,7 @@ class SpriteSheet {
     monstTile[297] = 292; // baluchitherium
     monstTile[309] = 292; // diplodocus
     monstTile[310] = 292; // brontosaurus
+    monstTile[314] = 408; // blue pool horror
     monstTile[315] = 292; // cetiosaurus
     monstTile[316] = 292; // brachiosaurus
     monstTile[318] = 292; // tyranosaurus rex
@@ -324,12 +329,14 @@ class SpriteSheet {
     monstStyle[83]  = Colors.purple; // violet fungi
     monstStyle[100] = Colors.grey; // gray ooze
     monstStyle[105] = Colors.grey.shade200; // winter wolf
+    monstStyle[109] = Colors.brown; // ochre jelly
     monstStyle[149] = Colors.green; // green slime
     monstStyle[155] = Colors.brown; // jackalwere
     monstStyle[174]  = Colors.grey.shade200; // polar bear
     monstStyle[186]  = Colors.brown; // cave bear
     monstStyle[241]  = Colors.blue; // gelatinous blue horror
     monstStyle[248]  = Colors.grey.shade200; // kodiak bear
+    monstStyle[314]  = Colors.blue; // blue pool horror
     monstStyle[333]  = Colors.amber; // ancient brass dragon
     monstStyle[334]  = Colors.grey.shade100; // ancient chrome dragon
     monstStyle[335]  = Colors.blueGrey.shade100; // ancient crystal dragon

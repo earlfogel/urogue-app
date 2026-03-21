@@ -95,7 +95,11 @@ int which_monst(int y, int x) {
 #endif
 
 int 
+#ifdef FLUTTER
 rogue_main (int argc, char **argv)
+#else
+main (int argc, char **argv)
+#endif
 {
     char *env;
     struct linked_list *item;

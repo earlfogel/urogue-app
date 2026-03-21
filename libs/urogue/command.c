@@ -453,11 +453,11 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			   msg("UltraRogue version %s.",
 				release);
 		when CTRL('R') :
-		    after = FALSE;
 #ifdef EARL
 #ifdef FLUTTER
 		case 'X':
 #endif
+		    after = FALSE;
 		    char fname[200];
 		    strcpy(fname, home);
 		    strcat(fname, "rogue.asave");

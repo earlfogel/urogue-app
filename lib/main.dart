@@ -64,7 +64,8 @@ class GameMap extends StatelessWidget {
     RenderObject? obj = context.findRenderObject();
     if (obj != null) {
       RenderBox? box = obj as RenderBox;
-      screen = box.size;
+      if (box.size.width > 1 && box.size.height > 1) // oops!
+	  screen = box.size;
     }
 
     // map

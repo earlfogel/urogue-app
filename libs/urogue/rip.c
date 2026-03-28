@@ -162,7 +162,7 @@ death (int monst)
 	    ch = readchar();
 	    if (ch == 'n' || ch == 'N') {
 		/* delete old autosave file */
-		if (access(fname, F_OK) == -0)
+		if (access(fname, F_OK) == 0)
 		    unlink(fname);
 	    } else {
 		msg("");

@@ -46,9 +46,9 @@ int get_diff(opt_arg *o_opt, WINDOW *win);
 OPTION	optlist[] = {
     {"doorstop", "Stop running when adjacent (doorstop): ",
 	{&doorstop},	put_bool,	get_bool	},
+#ifndef FLUTTER
     {"jump",	 "Show position only at end of run (jump): ",
 	{&jump},		put_bool,	get_bool	},
-#ifndef FLUTTER
     {"step",	"Do inventories one line at a time (step): ",
 	{&slow_invent},	put_bool,	get_bool	},
 #endif
@@ -327,7 +327,14 @@ get_string(char *opt, WINDOW *win)
 	    continue;
 	}
 	*sp++ = c;
-	waddstr(win, unctrl(c));
+	/* waddstr(win, unctrl(c)); */
+	if (flutter && win == cw) {
+	    *sp = '\0';
+	    mvwaddstr(win, 0, ox, buf);
+	    wclrtoeol(win), draw(win);
+	} else {
+	    waddstr(win, unctrl(c));
+	}
     }
     *sp = '\0';
     if (sp > buf)	/* only change option if something has been typed */

@@ -10,6 +10,7 @@ import 'sprites.dart';
 import 'ffibridge.dart';
 
 bool lessStats = false;
+bool noStats = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,8 @@ class Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: lightMode,
+      //theme: lightMode,
+      theme: darkMode,
       darkTheme: darkMode,
       themeMode: Provider.of<ThemeProvider>(context).themeMode,
       home: const GameView(),
@@ -74,17 +76,17 @@ class GameMap extends StatelessWidget {
 	    size = Size(14,18);
     }
 
-    // adjust stats for narrow screens
+    // adjust stats for small screens
     if (board.hasStats) {
-//      if (Platform.isAndroid && screen.width > screen.height)
-//	lessStats = false;
-//      else if (!Platform.isAndroid && screen.width / 12 > 80)
-//	lessStats = false;
       double fontSize = (Platform.isAndroid ? 12 : 20);
       if (screen.width / fontSize > 60)
 	lessStats = false;
       else
 	lessStats = true;
+      if (screen.height / fontSize > 8)
+	noStats = false;
+      else if (screen.height / fontSize < 6)
+	noStats = true;
     }
 
     Offset playerXY =
@@ -188,7 +190,7 @@ class _GameViewState extends State<GameView> {
       ]));
     }
 
-    if (board.hasRip || !board.hasStats) {
+    if (board.hasRip || !board.hasStats || noStats) {
       stats = [];
     }
 
@@ -199,11 +201,12 @@ class _GameViewState extends State<GameView> {
       InputTool(icon: Icons.arrow_upward, title: 'Up', cmd: 'k'),
       InputTool(icon: Icons.arrow_forward, title: 'Right', cmd: 'l'),
       InputTool(icon: Icons.update, title: 'Rest', cmd: '.'),
-      InputTool(icon: Icons.keyboard_arrow_up, title: 'Up stairs', cmd: '<'),
-      InputTool(icon: Icons.keyboard_arrow_down, title: 'Down stairs', cmd: '>'),
       InputTool(icon: Icons.space_bar, title: 'Space', cmd: ' '),
       InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
     ];
+    if (board.hasStairs)
+      commands.insert(4,
+	InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%'));
 
     if (board.hasRip) {
       commands = [
@@ -222,8 +225,8 @@ class _GameViewState extends State<GameView> {
     return Scaffold(
         body: OrientationBuilder(
         builder: (context, orientation) {
-	    board.orientationChanged = true;
-	    Future.delayed(const Duration(milliseconds: 50), _updateScreen);
+	    //board.orientationChanged = true;
+	    Future.delayed(const Duration(milliseconds: 100), _updateScreen);
 	    return SafeArea(
 	    child: InputListener(
       toolbar: commands,
@@ -314,6 +317,10 @@ class _GameViewState extends State<GameView> {
           case 'Enter':
             s = '\n';
             break;
+          case 'Backspace':
+          case 'Delete':
+            s = '\b';
+            break;
           case 'Shift Left':
           case 'Shift Right':
           case 'Control Left':
@@ -337,7 +344,7 @@ class _GameViewState extends State<GameView> {
 	    }
 	    s = '';
 	}
-
+/*
 	if (s == '@') {
 	  if (!board.useSprites) {
 	    Provider.of<ThemeProvider>(context, listen: false).toggleTheme(context);
@@ -350,11 +357,11 @@ class _GameViewState extends State<GameView> {
 	  }
 	    s = '';
 	}
-
+*/
         if (s.length == 1) {
           FFIBridge.pushKey(s);
         }
-        Future.delayed(const Duration(milliseconds: 50), _updateScreen);
+        Future.delayed(const Duration(milliseconds: 100), _updateScreen);
       },
     ));}));
   }

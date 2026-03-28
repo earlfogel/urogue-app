@@ -16,10 +16,11 @@ class BoardData extends ChangeNotifier {
   bool hasMore = false;
   bool hasStats = false;
   bool hasStar = false;
-  bool useSprites = false;
+  bool hasStairs = false;
+  bool useSprites = true;
   bool hasRip = false;
   //bool hasDir = false;
-  bool isDarkTheme = false;
+  bool isDarkTheme = true;
   String oldBuffer = '';
   bool oldUseSprites = false;
   bool oldIsDarkTheme = false;
@@ -166,7 +167,9 @@ class BoardData extends ChangeNotifier {
     hasStar = buffer.contains('* for list');
     //hasDir = buffer.contains('Which direction?');
     if (buffer.contains('Press space')) hasMore = true;
+    hasStairs = FFIBridge.foundStairs();
     hasStats = false;
+    stats = {};
 
     // parse status > Level: 1  Gold: 0      Hp: 12(12)  Str: 16(16)  Arm: 4   Exp: 1/0
     String status = getLine(23) + " " + getLine(24);
@@ -215,7 +218,7 @@ class BoardData extends ChangeNotifier {
           if (c != ' ') {
             Color clr = sheet.colorMap[c] ?? defaultColor;
 	    if (!isDarkTheme) {
-		if (c == '@' || c == '_')
+		if (c == '@' || c == '_' || c == '\'')
 		    clr = Colors.yellow.shade600;
 	    }
             Cell cell = Cell()
@@ -251,10 +254,21 @@ class BoardData extends ChangeNotifier {
 			cell.color = Colors.green;
 		    else
 			cell.color = Colors.blue;
+		} else {
+		    int mnum = FFIBridge.whichMonst(y, x);
+		    if (mnum > 0) { // monster holding magic item?
+			cell.sprite = sheet.monstTile[mnum];
+			if (c == '<')
+			    cell.color = Colors.red;
+			else if (c == '>')
+			    cell.color = Colors.green;
+			else
+			    cell.color = Colors.blue;
+		    }
 		}
 	    }
             cells.add(cell);
-            if (c == '@' || c == '_') {
+            if (c == '@' || c == '_' || c == '\'') {
               player = cell;
             }
           }

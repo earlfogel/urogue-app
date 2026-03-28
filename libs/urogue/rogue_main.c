@@ -92,6 +92,20 @@ int which_monst(int y, int x) {
     }
     return -1;
 }
+
+bool found_stairs()
+{
+    int x, y;
+    if (mvwinch(stdscr, hero.y, hero.x) == '%')
+	return 1;
+    for (x=0; x<COLS; x++) {
+	for (y=1; y<LINES - 2; y++) {
+	    if (mvwinch(cw, y, x) == '%')
+		return 1;
+	}
+    }
+    return 0;
+}
 #endif
 
 int 
@@ -217,7 +231,7 @@ printf("\n");
 	   exit(0);
 	   break;
 	default:
-#if 0
+#ifndef FLUTTER
 	    usage();
 	    exit(1);
 #endif
@@ -294,8 +308,11 @@ LINES=25; COLS=80;
 #endif
 #if 0
 printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
+printf("PDC_LINES=%s PDC_COLS=%s\n", getenv("PDC_LINES"), getenv("PDC_COLS"));
+fflush(stdout);
 #endif
 
+#ifndef FLUTTER
 #ifdef PDCURSES
     {
 	int pdc_lines = LINES;
@@ -313,6 +330,7 @@ fflush(stdout);
 }
 	}
     }
+#endif
 #endif
 
     setup();

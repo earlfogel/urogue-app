@@ -22,6 +22,7 @@ int is_rogue_running();
 int what_thing(int y, int x);
 int which_thing(int y, int x);
 int which_monst(int y, int x);
+int found_stairs(void);
 }
 
 pthread_t threadId = 0;
@@ -111,6 +112,12 @@ EXPORT
 int whichMonst(int y, int x)
 {
     return which_monst(y, x);
+}
+
+EXPORT
+int foundStairs(void)
+{
+    return found_stairs();
 }
 
 EXPORT

@@ -75,6 +75,7 @@ add_library(rogue
   ./urogue/misc.c
   ./urogue/monsdata.c
   ./urogue/monsters.c
+  ./urogue/mouse.c
   ./urogue/move.c
   ./urogue/new_level.c
   ./urogue/options.c

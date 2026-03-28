@@ -1053,9 +1053,7 @@ extern bool in_shell;			/* True if executing a shell */
 extern bool monst_dead;			/* Indicates if monster got killed */
 extern bool game_over;			/* Is this the end? */
 extern bool serious_fight;		/* fight longer and harder */
-#ifdef MOUSE
 extern bool mousemove;
-#endif
 extern bool flutter;			/* code built to run as a flutter app */
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */
@@ -1378,11 +1376,9 @@ char *id_monst(int monster);
 void check_residue(struct thing *tp);
 void sell(struct thing *tp);
 /* mouse.c */
-#ifdef MOUSE
 char do_mousemove(coord dest, coord prev);
 char do_mouseclick(coord dest);
 coord fix_mousedest(coord dest);
-#endif
 /* move.c */
 void do_run(int ch);
 void corr_move(int dy, int dx);

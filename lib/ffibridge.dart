@@ -46,6 +46,10 @@ class FFIBridge {
         .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('whichMonst');
     whichMonst = _whichMonst.asFunction<int Function(int, int)>();
 
+    final _foundStairs = nativeApiLib
+        .lookup<NativeFunction<Bool Function()>>('foundStairs');
+    foundStairs = _foundStairs.asFunction<bool Function()>();
+
     final _se = nativeApiLib
         .lookup<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>('setEnv');
     _setEnv = _se.asFunction<void Function(Pointer<Utf8>, Pointer<Utf8>)>();
@@ -63,6 +67,7 @@ class FFIBridge {
   static late Function whatThing;
   static late Function whichThing;
   static late Function whichMonst;
+  static late Function foundStairs;
   static late Function _setEnv;
 
   static String capitalize(String str) {

@@ -102,7 +102,11 @@ bool notify = TRUE;
 bool cutcorners = FALSE;
 bool doorstop = TRUE;
 bool door_stop = FALSE;
-bool jump = TRUE;
+#ifdef FLUTTER
+    bool jump = FALSE;
+#else
+    bool jump = TRUE;
+#endif
 bool slow_invent = FALSE;
 bool firstmove = FALSE;
 bool askme = TRUE;			/* ask me about unidentified things */
@@ -111,13 +115,11 @@ bool in_shell = FALSE;
 bool monst_dead = FALSE;
 bool game_over = FALSE;
 bool serious_fight = FALSE;
-#ifdef MOUSE
 bool mousemove = FALSE;
-#endif
 #ifdef FLUTTER
-bool flutter = TRUE;			/* code built to run as a flutter app */
+    bool flutter = TRUE;		/* code built to run as a flutter app */
 #else
-bool flutter = FALSE;			/* code built normally */
+    bool flutter = FALSE;		/* code built normally */
 #endif
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */

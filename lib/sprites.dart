@@ -118,33 +118,35 @@ class SpriteSheet {
     tilesetMap['8'] = 905; // spear
 
     tilesetMap['+'] = 534; // door
-    tilesetMap['['] = 626; // poison pool
-    tilesetMap['"'] = 627; // shimmering pool
+    //tilesetMap['&'] = 534; // secret door
+    tilesetMap['['] = 627; // poison pool
+    tilesetMap['"'] = 626; // shimmering pool
     tilesetMap['%'] = 532; // staircase
 
     tilesetMap[':'] = 822; // food
     tilesetMap['!'] = 845; // potion
     tilesetMap[']'] = 927; // armor // 913-helmet
     tilesetMap[')'] = 903; // weapon
-    tilesetMap['('] = 689; // monster lair
+    tilesetMap['('] = 628; // monster lair
     tilesetMap['/'] = 983; // wand or staff
     tilesetMap['='] = 929; // ring
     tilesetMap['*'] = 755; // gold
     tilesetMap['?'] = 988; // scroll
     tilesetMap['^'] = 690; // trading post
     tilesetMap[';'] = 626; // rust trap
-    tilesetMap['>'] = 622; // trap door
-    tilesetMap['{'] = 622; // arrow trap
+    tilesetMap['>'] = 628; // trap door
+    tilesetMap['{'] = 632; // arrow trap
     tilesetMap['\$'] = 1124; // sleep trap
     tilesetMap['}'] = 624; // bear trap
     tilesetMap['~'] = 633; // teleport trap
-    tilesetMap['`'] = 622; // dart trap
-    tilesetMap['\\'] = 632; // maze trap
+    tilesetMap['`'] = 632; // dart trap
+    tilesetMap['\\'] = 628; // maze trap
     tilesetMap['<'] = 1114; // fire trap
     tilesetMap[','] = 930; // amulet
 
     tilesetMap['@'] = 124; // player
     tilesetMap['_'] = 124; // invisible player
+    tilesetMap['\''] = 167; // disguised player
 
     // monsters
     int nmonst = 407;
@@ -237,7 +239,7 @@ class SpriteSheet {
     monstTile[127] = 288; // giant crocodile
     monstTile[128] = 346; // griffin
     monstTile[129] = 289; // warg
-    monstTile[130] = 294; // hipogriff
+    monstTile[130] = 294; // unicorn
     monstTile[131] = 686; // entwife
     monstTile[132] = 345; // minotaur
     monstTile[134] = 290; // giant lynx
@@ -246,13 +248,14 @@ class SpriteSheet {
     monstTile[137] = 407; // wight
     monstTile[141] = 344; // uruk-hai orc
     monstTile[144] = 685; // ent
+    monstTile[145] = 294; // nightmare
     monstTile[147] = 407; // wraith
     monstTile[148] = 683; // archer bush
     monstTile[149] = 463; // green slime
     monstTile[150] = 290; // blink saber tooth tiger
     monstTile[152] = 285; // stag beetle
     monstTile[155] = 289; // jackalwere
-    monstTile[156] = 291; // were bear
+    monstTile[156] = 291; // werebear
     monstTile[157] = 288; // salamander
     monstTile[158] = 293; // ankylosaurus
     monstTile[161] = 290; // spotted lion
@@ -276,13 +279,19 @@ class SpriteSheet {
     monstTile[221] = 292; // gorgosaurus
     monstTile[224] = 685; // treant
     monstTile[233] = 292; // styracosaurus
+    monstTile[235] = 408; // black pudding
     monstTile[236] = 291; // mastodon
     monstTile[238] = 286; // giant scorpion
     monstTile[241] = 463; // gelatinous blue horror
+    monstTile[246] = 289; // rock hound
     monstTile[248] = 291; // kodiak bear
     monstTile[249] = 293; // very old dragon
+    monstTile[252] = 469; // flesh golem
     monstTile[255] = 292; // allosaurus
+    monstTile[256] = 292; // couatl
+    monstTile[260] = 289; // dire wolf
     monstTile[275] = 292; // stegosaurus
+    monstTile[282] = 469; // clay golem
     monstTile[294] = 292; // camarasaurus
     monstTile[295] = 292; // triceratops
     monstTile[297] = 292; // baluchitherium
@@ -292,7 +301,13 @@ class SpriteSheet {
     monstTile[315] = 292; // cetiosaurus
     monstTile[316] = 292; // brachiosaurus
     monstTile[318] = 292; // tyranosaurus rex
+    monstTile[322] = 469; // stone golem
+    monstTile[325] = 469; // diamond golem
+    monstTile[326] = 407; // lich
     monstTile[327] = 346; // falcon
+    monstTile[329] = 133; // hill giant
+    monstTile[331] = 133; // stone giant
+    monstTile[332] = 469; // iron golem
     monstTile[333] = 293; // ancient brass dragon
     monstTile[334] = 293; // ancient chrome dragon
     monstTile[335] = 293; // ancient crystal dragon
@@ -303,26 +318,30 @@ class SpriteSheet {
     monstTile[340] = 293; // ancient bronze dragon
     monstTile[341] = 293; // ancient blue dragon
     monstTile[342] = 293; // ancient silver dragon
+    monstTile[343] = 133; // frost giant
     monstTile[344] = 293; // ancient red dragon
     monstTile[345] = 293; // ancient gold dragon
     monstTile[346] = 293; // ancient night dragon
     monstTile[347] = 293; // ancient electrum dragon
+    monstTile[348] = 133; // fire giant
+    monstTile[349] = 133; // cloud giant
+    monstTile[351] = 133; // storm giant
     monstTile[352] = 144; // valkyrie
     monstTile[353] = 165; // evil sorceress
     monstTile[353] = 166; // evil sorcerer
     monstTile[361] = 293; // chromatic dragon
     monstTile[369] = 293; // platinum dragon
-    monstTile[404] = 133; // quartermaster
-    monstTile[406] = 133; // shopkeeper
+    monstTile[404] = 128; // quartermaster
+    monstTile[406] = 128; // shopkeeper
 
     // change colors for specific monsters
-    monstStyle[1]  = Colors.grey; // bat
-    monstStyle[2]  = Colors.blue; // xvart
-    monstStyle[3]  = Colors.blueGrey; // giant rat
-    monstStyle[4]  = Colors.brown; // jackal
-    monstStyle[7]  = Colors.grey; // vilstrak
-    monstStyle[13] = Colors.grey.shade100; // skeleton
-    monstStyle[20] = Colors.yellow; // fire beetle
+    monstStyle[1]   = Colors.grey; // bat
+    monstStyle[2]   = Colors.blue; // xvart
+    monstStyle[3]   = Colors.blueGrey; // giant rat
+    monstStyle[4]   = Colors.brown; // jackal
+    monstStyle[7]   = Colors.grey; // vilstrak
+    monstStyle[13]  = Colors.grey.shade100; // skeleton
+    monstStyle[20]  = Colors.yellow; // fire beetle
     monstStyle[29]  = Colors.grey.shade700; // black bear
     monstStyle[56]  = Colors.brown; // brown bear
     monstStyle[65]  = Colors.green; // leprechaun
@@ -330,29 +349,31 @@ class SpriteSheet {
     monstStyle[100] = Colors.grey; // gray ooze
     monstStyle[105] = Colors.grey.shade200; // winter wolf
     monstStyle[109] = Colors.brown; // ochre jelly
+    monstStyle[145] = Colors.grey.shade800; // nightmare
     monstStyle[149] = Colors.green; // green slime
     monstStyle[155] = Colors.brown; // jackalwere
-    monstStyle[174]  = Colors.grey.shade200; // polar bear
-    monstStyle[186]  = Colors.brown; // cave bear
-    monstStyle[241]  = Colors.blue; // gelatinous blue horror
-    monstStyle[248]  = Colors.grey.shade200; // kodiak bear
-    monstStyle[314]  = Colors.blue; // blue pool horror
-    monstStyle[333]  = Colors.amber; // ancient brass dragon
-    monstStyle[334]  = Colors.grey.shade100; // ancient chrome dragon
-    monstStyle[335]  = Colors.blueGrey.shade100; // ancient crystal dragon
-    monstStyle[336]  = Colors.white; // ancient white dragon
-    monstStyle[337]  = Colors.grey.shade800; // ancient black dragon
-    monstStyle[338]  = Colors.amber; // ancient copper dragon
-    monstStyle[339]  = Colors.green; // ancient green dragon
-    monstStyle[340]  = Colors.amber; // ancient bronze dragon
-    monstStyle[341]  = Colors.blue; // ancient blue dragon
-    monstStyle[342]  = Colors.grey.shade100; // ancient silver dragon
-    monstStyle[344]  = Colors.red; // ancient red dragon
-    monstStyle[345]  = Colors.yellow; // ancient gold dragon
-    monstStyle[346]  = Colors.grey.shade800; // ancient night dragon
-    monstStyle[347]  = Colors.yellow.shade200; // ancient electrum dragon
-    monstStyle[361]  = Colors.amber.shade700; // chromatic dragon
-    monstStyle[369]  = Colors.grey.shade200; // platinum dragon
+    monstStyle[174] = Colors.grey.shade200; // polar bear
+    monstStyle[186] = Colors.brown; // cave bear
+    monstStyle[235] = Colors.grey.shade700; // black pudding
+    monstStyle[241] = Colors.blue; // gelatinous blue horror
+    monstStyle[248] = Colors.grey.shade200; // kodiak bear
+    monstStyle[314] = Colors.blue; // blue pool horror
+    monstStyle[333] = Colors.amber; // ancient brass dragon
+    monstStyle[334] = Colors.grey.shade100; // ancient chrome dragon
+    monstStyle[335] = Colors.blueGrey.shade100; // ancient crystal dragon
+    monstStyle[336] = Colors.white; // ancient white dragon
+    monstStyle[337] = Colors.grey.shade800; // ancient black dragon
+    monstStyle[338] = Colors.amber; // ancient copper dragon
+    monstStyle[339] = Colors.green; // ancient green dragon
+    monstStyle[340] = Colors.amber; // ancient bronze dragon
+    monstStyle[341] = Colors.blue; // ancient blue dragon
+    monstStyle[342] = Colors.grey.shade100; // ancient silver dragon
+    monstStyle[344] = Colors.red; // ancient red dragon
+    monstStyle[345] = Colors.yellow; // ancient gold dragon
+    monstStyle[346] = Colors.grey.shade800; // ancient night dragon
+    monstStyle[347] = Colors.yellow.shade200; // ancient electrum dragon
+    monstStyle[361] = Colors.amber.shade700; // chromatic dragon
+    monstStyle[369] = Colors.grey.shade200; // platinum dragon
 
     // color map
     colorMap['.'] = const Color.fromRGBO(0x40, 0x40, 0x40, 1);
@@ -371,8 +392,10 @@ class SpriteSheet {
     colorMap['!'] = Colors.purple;
     colorMap['/'] = Colors.purple;
     colorMap[':'] = Colors.purple;
-    colorMap['\$'] = Colors.purple;
     colorMap[','] = Colors.yellow; // artifact
+    colorMap['\$'] = Colors.purple; // sleep trap
+    colorMap['\\'] = Colors.yellow; // maze trap
+    colorMap['('] = Colors.red; // monster lair
     colorMap[';'] = Colors.red; // rust trap
     colorMap['{'] = Colors.yellow; // arrow trap
     colorMap['`'] = Colors.yellow; // dart trap
@@ -391,7 +414,8 @@ class SpriteSheet {
     colorMap['3'] = colorMap['-'] ?? Colors.white;
 
     colorMap['@'] = const Color.fromRGBO(0xff, 0xff, 0xaa, 1);
-    colorMap['_'] = Colors.grey;
+    colorMap['_'] = Colors.grey; // invisible player
+    colorMap['\''] = Colors.grey; // disguised player
 
     image = await loadImageAsset('assets/Scroll-o-Sprites.png');
   }

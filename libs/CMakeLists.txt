@@ -56,7 +56,7 @@ target_include_directories(pdcurses
     ./PDCurses-3.4/
 )
 
-add_definitions(-fPIC -DFLUTTER)
+add_definitions(-fPIC -DFLUTTER -DEARL)
 add_library(rogue
   STATIC
   ./urogue/armor.c
@@ -86,7 +86,7 @@ add_library(rogue
   ./urogue/rings.c
   ./urogue/rip.c
   ./urogue/rogue.c
-  ./urogue/rogue_main.c
+  ./urogue/main.c
   ./urogue/rooms.c
   ./urogue/save.c
   ./urogue/scrolls.c

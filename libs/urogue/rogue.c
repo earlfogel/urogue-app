@@ -104,8 +104,10 @@ bool doorstop = TRUE;
 bool door_stop = FALSE;
 #ifdef FLUTTER
     bool jump = FALSE;
+    bool flutter = TRUE;		/* code built to run as a flutter app */
 #else
     bool jump = TRUE;
+    bool flutter = FALSE;		/* code built normally */
 #endif
 bool slow_invent = FALSE;
 bool firstmove = FALSE;
@@ -116,11 +118,6 @@ bool monst_dead = FALSE;
 bool game_over = FALSE;
 bool serious_fight = FALSE;
 bool mousemove = FALSE;
-#ifdef FLUTTER
-    bool flutter = TRUE;		/* code built to run as a flutter app */
-#else
-    bool flutter = FALSE;		/* code built normally */
-#endif
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */
 

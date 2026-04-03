@@ -14,7 +14,7 @@ static char buffer[3200];
 
 extern "C" {
 char *getScreenData();
-bool isScreenDirty();
+//bool isScreenDirty();
 void setUpdateConsumers(int c);
 void pushKey(int k);
 int rogue_main(int argc, char **argv);
@@ -22,7 +22,7 @@ int is_rogue_running();
 int what_thing(int y, int x);
 int which_thing(int y, int x);
 int which_monst(int y, int x);
-int found_stairs(void);
+int on_stairs(void);
 }
 
 pthread_t threadId = 0;
@@ -115,9 +115,9 @@ int whichMonst(int y, int x)
 }
 
 EXPORT
-int foundStairs(void)
+int onStairs(void)
 {
-    return found_stairs();
+    return on_stairs();
 }
 
 EXPORT

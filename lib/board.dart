@@ -17,6 +17,7 @@ class BoardData extends ChangeNotifier {
   bool hasStats = false;
   bool hasStar = false;
   bool hasStairs = false;
+  bool onStairs = false;
   bool useSprites = true;
   bool hasRip = false;
   //bool hasDir = false;
@@ -167,7 +168,13 @@ class BoardData extends ChangeNotifier {
     hasStar = buffer.contains('* for list');
     //hasDir = buffer.contains('Which direction?');
     if (buffer.contains('Press space')) hasMore = true;
-    hasStairs = FFIBridge.foundStairs();
+    //hasStairs = FFIBridge.foundStairs();
+    hasStairs = false;
+    for (int y = 1; y < 23; y++) {
+	if (getLine(y).contains('%'))
+	    hasStairs = true;
+    }
+    onStairs = FFIBridge.onStairs();
     hasStats = false;
     stats = {};
 

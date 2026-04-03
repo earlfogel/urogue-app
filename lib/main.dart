@@ -205,7 +205,11 @@ class _GameViewState extends State<GameView> {
       InputTool(icon: Icons.space_bar, title: 'Space', cmd: ' '),
       InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
     ];
-    if (board.hasStairs)
+    if (board.onStairs)
+      commands.insert(4,
+	InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%',
+	    color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
+    else if (board.hasStairs)
       commands.insert(4,
 	InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%'));
 

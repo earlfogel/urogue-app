@@ -93,17 +93,13 @@ int which_monst(int y, int x) {
     return -1;
 }
 
-bool found_stairs()
+bool on_stairs()
 {
     int x, y;
-    if (mvwinch(stdscr, hero.y, hero.x) == '%')
+    char ch;
+    ch = mvwinch(stdscr, hero.y, hero.x);
+    if (ch == '%')
 	return 1;
-    for (x=0; x<COLS; x++) {
-	for (y=1; y<LINES - 2; y++) {
-	    if (mvwinch(cw, y, x) == '%')
-		return 1;
-	}
-    }
     return 0;
 }
 #endif
@@ -282,6 +278,7 @@ if (rogue_running) {
     count = 0;
     no_command = 0;
     save_ch = ' ';
+    runch = ' ';
     kill_daemon(DAEMON_DOCTOR);
     extinguish_fuse(FUSE_SWANDER);
     kill_daemon(DAEMON_STOMACH);

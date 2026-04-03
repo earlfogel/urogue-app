@@ -21,11 +21,13 @@ class InputTool {
       {IconData? this.icon,
       String this.title = '',
       String this.cmd = '',
+      Color this.color = Colors.white,
       Function? this.onPressed});
 
   IconData? icon;
   String title = '';
   String cmd = '';
+  Color color = Colors.white;
   Function? onPressed;
 }
 
@@ -211,7 +213,7 @@ class _InputListener extends State<InputListener> {
 		    // use IconButton for onPressed events
 		    // and Gesture detector for the rest
 		    child: IconButton(
-                    icon: Icon(t.icon, size: iconSize),
+                    icon: Icon(t.icon, size: iconSize, color: t.color),
 		    //tooltip: t.title,
                     onPressed: () {
 		      if (t.cmd.length > 0) {

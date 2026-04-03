@@ -77,9 +77,9 @@ OPTION	optlist[] = {
 	{file_name},	put_str,	get_str		},
     {"score",	 "Score file (score): ",
 	{score_file},	put_str,	get_str		},
-#endif
     {"class",	"Character class (class): ",
 	{&char_type},	put_abil,	get_abil	},
+#endif
     {"difficulty",	"Difficulty: ",
 	{&difficulty},	put_diff,	get_diff	},
 };
@@ -100,7 +100,7 @@ option ()
      */
     for (op = optlist; op < &optlist[NUM_OPTS]; op++)
     {
-	if (flutter) {
+	if (flutter) { /* remove option name in parentheses */
 	    char *paren = strstr(op->o_prompt, " (");
 	    if (paren) {
 		char *prompt = ALLOC(strlen(op->o_prompt) + 1);
@@ -229,7 +229,7 @@ get_bool(opt_arg *opt, WINDOW *win)
     getyx(win, oy, ox);
     waddstr(win, *opt->barg ? "True" : "False");
     if (flutter)
-	mvwaddstr(win, oy, ox + 10, "(T or F)");
+	mvwaddstr(win, oy, ox + 6, "(T or F)");
     while(op_bad)	
     {
 	wmove(win, oy, ox);
@@ -328,7 +328,7 @@ get_string(char *opt, WINDOW *win)
 	}
 	*sp++ = c;
 	/* waddstr(win, unctrl(c)); */
-	if (flutter && win == cw) {
+	if (flutter && win == cw) { /* 'call' or 'mark' */
 	    *sp = '\0';
 	    mvwaddstr(win, 0, ox, buf);
 	    wclrtoeol(win), draw(win);

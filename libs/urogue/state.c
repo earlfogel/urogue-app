@@ -79,7 +79,7 @@ int reserved1 = 0;
 struct linked_list  *fam_ptr = NULL;        /* A ptr to the familiar        */
 struct linked_list  *curr_mons  = NULL;     /* The mons. currently moving   */
 struct linked_list  *next_mons = NULL;      /* The mons. after curr_mons    */
-struct object       *bag_obj  = NULL;       /* The Magic Bag, if we have it */
+/* struct object       *bag_obj  = NULL; */      /* The Magic Bag, if we have it */
 
 
 /****************************************************************************/

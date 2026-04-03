@@ -29,6 +29,7 @@ class BoardData extends ChangeNotifier {
   var defaultColor = Colors.white;
   Map<String, String> stats = {};
   List<Cell> cells = [];
+  final isAlpha = RegExp("[a-zA-Z]");
 
   Cell player = Cell();
 
@@ -53,7 +54,8 @@ class BoardData extends ChangeNotifier {
   }
 
   bool isWall(String c, String c2) {
-    return c == '-' || c == '|' || c == '+' || (c == '@' && c2 == '|');
+    return c == '-' || c == '|' || c == '+' || (c == '@' && c2 == '|')
+      || (isAlpha.hasMatch(c) && c2 == '|');
   }
 
   String getCharAt(int y, int x) {
@@ -63,7 +65,7 @@ class BoardData extends ChangeNotifier {
   }
 
   void modifyWeaponTiles() {
-    for (int r = 0; r < 25; r++) {
+    for (int r = 1; r < 23; r++) {
       for (int c = 0; c < 80; c++) {
         int idx = (r * 80) + c;
         String cc = buffer[idx];
@@ -109,7 +111,7 @@ class BoardData extends ChangeNotifier {
   }
 
   void modifyCornerTiles() {
-    for (int r = 0; r < 25; r++) {
+    for (int r = 1; r < 23; r++) {
       for (int c = 0; c < 80; c++) {
         int idx = (r * 80) + c;
         String cc = buffer[idx];
@@ -222,7 +224,6 @@ class BoardData extends ChangeNotifier {
       // end before 23 - skips the stats
       int start = (hasStats)? 1: 0;
       int end = (hasStats)? 23: 25;
-      final isAlpha = RegExp("[a-zA-Z]");
       for (int y = start; y < end; y++) {
         for (int x = 0; x < 80; x++) {
           String c = buffer[y * 80 + x];

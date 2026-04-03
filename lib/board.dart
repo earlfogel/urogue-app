@@ -33,19 +33,23 @@ class BoardData extends ChangeNotifier {
   Cell player = Cell();
 
   String getLine(int l) {
-    String res = '';
+    if (buffer.length == 0)
+      return '';
+    final tmpbuf = StringBuffer('');
     for (int i = 0; i < 80; i++) {
-      res += buffer[l * 80 + i];
+      tmpbuf.write(buffer[l * 80 + i]);
     }
-    return res;
+    return tmpbuf.toString();
   }
 
   String getCol(int c) {
-    String res = '';
+    if (buffer.length == 0)
+      return '';
+    final tmpbuf = StringBuffer('');
     for (int l = 0; l < 25; l++) {
-      res += buffer[l * 80 + c];
+      tmpbuf.write(buffer[l * 80 + c]);
     }
-    return res;
+    return tmpbuf.toString();
   }
 
   bool isWall(String c, String c2) {

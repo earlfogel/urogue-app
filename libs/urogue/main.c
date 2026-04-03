@@ -132,12 +132,12 @@ char *get_visible()
     char c;
     static char buf[25*80+1];  /* screen size plus null-termination */
     if (curscr == NULL)
-        return "";
+	return "";
     sem_wait(&mutex);
     for (y=0; y<25; y++) {
-        for (x=0; x<80; x++) {
-            buf[(y*80)+x] = mvwinch(curscr, y, x);
-        }
+	for (x=0; x<80; x++) {
+	    buf[(y*80)+x] = mvwinch(curscr, y, x);
+	}
     }
     sem_post(&mutex);
     buf[sizeof(buf) - 1] = '\0';  /* add string terminator */

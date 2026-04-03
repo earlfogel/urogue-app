@@ -13,6 +13,7 @@
 static char buffer[3200];
 
 extern "C" {
+char *get_visible();
 char *getScreenData();
 //bool isScreenDirty();
 void setUpdateConsumers(int c);
@@ -82,7 +83,8 @@ void restartApp()
 EXPORT
 char* getScreenBuffer()
 {
-    return getScreenData();
+    return get_visible();
+    //return getScreenData();
 }
 
 EXPORT

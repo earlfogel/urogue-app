@@ -113,7 +113,12 @@
 #define otherwise break;default
 #define until(expr) while(!(expr))
 #define ce(a, b) ((a).x == (b).x && (a).y == (b).y)
-#define draw(window) wrefresh(window)
+#ifdef FLUTTER
+void draw(WINDOW *scr);
+void redraw(WINDOW *scr);
+#else
+#   define draw(window) wrefresh(window)
+#endif
 #define hero player.t_pos
 #define pstats player.t_stats
 #define max_stats player.maxstats

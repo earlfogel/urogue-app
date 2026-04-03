@@ -45,6 +45,23 @@
 #endif
 
 #ifdef FLUTTER
+#include <ctype.h>
+#include <pthread.h>
+#include <semaphore.h>
+sem_t mutex;
+int which_thing(int y, int x);
+
+void
+draw(WINDOW *win)
+{
+    int x, y;
+    sem_wait(&mutex);
+    touchwin(win);
+    wmove(win, LINES, 0);
+    wrefresh(win);
+    sem_post(&mutex);
+}
+
 int rogue_running;
 
 int is_rogue_running()
@@ -90,6 +107,9 @@ int which_monst(int y, int x) {
 	    return th->t_index;
 	}
     }
+    if (x == hero.x && y == hero.y) {
+	return 0;
+    }
     return -1;
 }
 
@@ -97,11 +117,33 @@ bool on_stairs()
 {
     int x, y;
     char ch;
+    sem_wait(&mutex);
     ch = mvwinch(stdscr, hero.y, hero.x);
+    sem_post(&mutex);
     if (ch == '%')
 	return 1;
     return 0;
 }
+
+char *get_visible()
+{
+    int x, y;
+    int oldx, oldy;
+    char c;
+    static char buf[25*80+1];  /* screen size plus null-termination */
+    if (curscr == NULL)
+        return "";
+    sem_wait(&mutex);
+    for (y=0; y<25; y++) {
+        for (x=0; x<80; x++) {
+            buf[(y*80)+x] = mvwinch(curscr, y, x);
+        }
+    }
+    sem_post(&mutex);
+    buf[sizeof(buf) - 1] = '\0';  /* add string terminator */
+    return buf;
+}
+
 #endif
 
 int 
@@ -122,6 +164,10 @@ main (int argc, char **argv)
     struct stat sb;
     bool show_welcome = FALSE;
     char char_file[LINELEN];
+
+#ifdef FLUTTER
+    sem_init(&mutex, 0, 1);
+#endif
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
 
@@ -478,6 +524,10 @@ get_food:
     }
 
     playit();
+
+#ifdef FLUTTER
+    sem_destroy(&mutex);
+#endif
 
     /* notreached */
     return 0;

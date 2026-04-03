@@ -37,4 +37,9 @@
 - make autosave work on Android
 - detect-magic shows magical items as red/blue/green for curse/normal/bless
 - press '-' to see previous messages
-
+- replace two up/down icons with one Stairs icon, which
+  appears when you find the stairs on a level and turns green
+  when you step on it.
+- use semaphores to stop flutter from reading curses windows
+  while urogue is writing them (as reading changes the cursor position
+  and causes display glitches)

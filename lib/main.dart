@@ -93,8 +93,8 @@ class GameMap extends StatelessWidget {
     Offset playerXY =
         Offset(board.player.x * size.width, (board.player.y - 2) * size.height);
 
-    /* Special screens, e.g. inventory, help, options */
-    if (!board.hasStats && board.buffer.length >= 3200) {
+    /* Special screens display as text, e.g. inventory, help, options */
+    if (!board.hasStats && board.buffer.length >= 2000) {
       int first_row=-1, last_row=-1, first_col=-1, last_col=-1;
       for (int i = 0; i < 25; i++) {
 	String line = board.getLine(i).trim();
@@ -231,7 +231,7 @@ class _GameViewState extends State<GameView> {
         body: OrientationBuilder(
         builder: (context, orientation) {
 	    //board.orientationChanged = true;
-	    Future.delayed(const Duration(milliseconds: 100), _updateScreen);
+	    Future.delayed(const Duration(milliseconds: 50), _updateScreen);
 	    return SafeArea(
 	    child: InputListener(
       toolbar: commands,

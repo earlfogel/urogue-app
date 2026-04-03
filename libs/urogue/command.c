@@ -80,7 +80,6 @@ command ()
 	status(FALSE);
 	lastscore = purse;
 	wmove(cw, hero.y, hero.x);
-#ifdef MOUSE
 	if (mousemove) {
 	    static char pch = ' ';
 	    if (!jump) {
@@ -95,7 +94,6 @@ command ()
 		pch = ch;
 	    }
 	} else
-#endif
 	if (!((running || count || fighting) && jump)) {
 	    draw(cw);			/* Draw screen */
 	    if (running)
@@ -479,7 +477,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    strcat(fname, "rogue.asave");
 		    if (autosave && access(fname, F_OK) == 0) {
 			msg("Do you want to restart this level? (y/N)");
-			wrefresh(cw);
+			draw(cw);
 			if (readchar() == 'y')
 			    death(D_MISADVENTURE);	/* restart level? */
 			msg("");
@@ -487,10 +485,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 #endif
 				WINDOW *tmpwin = newwin(LINES, COLS, 0, 0);
 				wclear(tmpwin);
-				wrefresh(tmpwin);
+				draw(tmpwin);
 				(void) delwin(tmpwin);
 				usleep(50000);
-				wrefresh(cw);
+				draw(cw);
 				touchwin(cw); /* MMMMMMMMMM */
 		when CTRL('P') :
 #ifdef FLUTTER
@@ -717,10 +715,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	if (take != 0 && levtype != POSTLEV) {
 	    if (autopickup && !moving && (!searching_run || take == GOLD))
 	        pick_up(take);
-#ifdef MOUSE
 	    else if (autopickup && mousemove && take == GOLD)
 	        pick_up(take);
-#endif
 	    else
 		show_floor();
 	}

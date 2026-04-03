@@ -165,7 +165,7 @@ class BoardData extends ChangeNotifier {
     // parse the message
     message = getLine(0).trim();
     hasMore = buffer.contains('--More--');
-    hasStar = buffer.contains('* for list');
+    hasStar = message.contains('* for list');
     //hasDir = buffer.contains('Which direction?');
     if (buffer.contains('Press space')) hasMore = true;
     //hasStairs = FFIBridge.foundStairs();
@@ -199,7 +199,7 @@ class BoardData extends ChangeNotifier {
       hasStats = true;
     }
 
-    // parse the map
+    // clear the map
     cells.clear();
 
     // change color based on theme
@@ -208,7 +208,7 @@ class BoardData extends ChangeNotifier {
 	defaultColor = Colors.black;
     }
 
-    if (buffer.length >= 3200) {
+    if (buffer.length >= 2000) {
       if (!hasRip && useSprites && hasStats) {
         modifyCornerTiles();
         modifyWeaponTiles();
@@ -219,9 +219,9 @@ class BoardData extends ChangeNotifier {
       int start = (hasStats)? 1: 0;
       int end = (hasStats)? 23: 25;
       final isAlpha = RegExp("[a-zA-Z]");
-      for (int i = start; i < end; i++) {
-        for (int j = 0; j < 80; j++) {
-          String c = buffer[i * 80 + j];
+      for (int y = start; y < end; y++) {
+        for (int x = 0; x < 80; x++) {
+          String c = buffer[y * 80 + x];
           if (c != ' ') {
             Color clr = sheet.colorMap[c] ?? defaultColor;
 	    if (!isDarkTheme) {
@@ -230,13 +230,11 @@ class BoardData extends ChangeNotifier {
 	    }
             Cell cell = Cell()
               ..data = c
-              ..x = j
-              ..y = i
+              ..x = x
+              ..y = y
               ..sprite = sheet.tilesetMap[c] ?? 0
               ..color = clr;
 	    if (useSprites && hasStats && isAlpha.hasMatch(c)) {
-		int y = i;
-		int x = j;
 		int mnum = FFIBridge.whichMonst(y, x);
 		if (mnum > 0) {
 		    // show the right tile
@@ -249,8 +247,6 @@ class BoardData extends ChangeNotifier {
 	    }
 	    /* is it a trap or a magical item? */
 	    if (useSprites && hasStats && "<\$>".contains(c)) {
-		int y = i;
-		int x = j;
 		int wt = FFIBridge.whichThing(y, x);
 		if (wt > 0) {
 		    String nc = String.fromCharCode(wt);

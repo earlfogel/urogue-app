@@ -54,7 +54,6 @@ int which_thing(int y, int x);
 void
 draw(WINDOW *win)
 {
-    int x, y;
     sem_wait(&mutex);
     touchwin(win);
     wmove(win, LINES, 0);
@@ -115,7 +114,6 @@ int which_monst(int y, int x) {
 
 bool on_stairs()
 {
-    int x, y;
     char ch;
     sem_wait(&mutex);
     ch = mvwinch(stdscr, hero.y, hero.x);
@@ -128,8 +126,6 @@ bool on_stairs()
 char *get_visible()
 {
     int x, y;
-    int oldx, oldy;
-    char c;
     static char buf[25*80+1];  /* screen size plus null-termination */
     if (curscr == NULL)
 	return "";
@@ -203,7 +199,11 @@ main (int argc, char **argv)
 
     /* Get default save file */
     strcpy(file_name, home);
+#ifdef FLUTTER
+    strcat(file_name, autosave_file);
+#else
     strcat(file_name, "rogue.save");
+#endif
 
     if ((env = getenv("SROGUEOPTS")) != NULL)
 	parse_opts(env);
@@ -395,12 +395,17 @@ fflush(stdout);
     /*
      * Restore saved game
      */
-#ifndef FLUTTER
+#ifdef FLUTTER
+    if (restore_file) {
+	restore_file = NULL;
+    }
+#endif
     if (restore_file) {
 	if (!restore(restore_file)) /* Note: restore returns on error only */
 	    exit(1);
     }
 
+#ifndef FLUTTER
    if (wizard)
 	printf("Hello %s, welcome to dungeon #%d", whoami, dnum);
     else

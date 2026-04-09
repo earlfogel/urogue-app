@@ -96,9 +96,12 @@ command ()
 	} else
 	if (!((running || count || fighting) && jump)) {
 	    draw(cw);			/* Draw screen */
-	    if (running)
-		usleep(4000);
-	    else if (count)
+	    if (running) {
+		if (flutter)
+		    usleep(10000);
+		else
+		    usleep(4000);
+	    } else if (count)
 		usleep(8000);
 	    else
 		usleep(12000);
@@ -474,7 +477,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 #ifdef EARL
 		    char fname[200];
 		    strcpy(fname, home);
-		    strcat(fname, "rogue.asave");
+		    strcat(fname, autosave_file);
 		    if (autosave && access(fname, F_OK) == 0) {
 			msg("Do you want to restart this level? (y/N)");
 			draw(cw);
@@ -483,13 +486,19 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			msg("");
 		    }
 #endif
-				WINDOW *tmpwin = newwin(LINES, COLS, 0, 0);
-				wclear(tmpwin);
-				draw(tmpwin);
-				(void) delwin(tmpwin);
-				usleep(50000);
-				draw(cw);
-				touchwin(cw); /* MMMMMMMMMM */
+#ifdef FLUTTER
+		    redraw(cw);
+#endif
+		    wclear(curscr);
+#if 0
+		    WINDOW *tmpwin = newwin(LINES, COLS, 0, 0);
+		    wclear(tmpwin);
+		    draw(tmpwin);
+		    (void) delwin(tmpwin);
+#endif
+		    usleep(50000);
+		    draw(cw);
+		    touchwin(cw); /* MMMMMMMMMM */
 		when CTRL('P') :
 #ifdef FLUTTER
 		case '-':
@@ -896,6 +905,13 @@ quit ()
     ch = readchar();
     if (ch == 'y')
     {
+	if (autosave) {
+	    char fname[200];
+	    strcpy(fname, home);
+	    strcat(fname, autosave_file);
+	    if (access(fname, F_OK) == 0)
+		unlink(fname);	/* delete old autosave file */
+	}
 	clear();
 	move(LINES-1, 0);
 	draw(stdscr);
@@ -1141,6 +1157,8 @@ d_level ()
     level++;
     new_level(NORMLEV);
     if (no_phase) unphase(NULL);
+    dest.x = dest.y = 0;
+    prev.x = prev.y = 0;
 }
 
 /*
@@ -1170,6 +1188,8 @@ u_level ()
 	    extinguish_fuse(FUSE_UNPHASE);
 	    unphase(NULL);
 	}
+	dest.x = dest.y = 0;
+	prev.x = prev.y = 0;
 	return;
     }
     else if (ch != STAIRS && 

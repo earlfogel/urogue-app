@@ -87,7 +87,6 @@ bool inwhgt = FALSE;			/* true if from wghtchk() */
 bool after;				/* True if we want after daemons */
 bool showcursor = FALSE;		/* Option to show cursor */
 bool autopickup = TRUE;			/* Option to pick up things you step on */
-bool autosave = FALSE;			/* Option to save game automatically */
 bool use_mouse = FALSE;			/* Option to move via mouse clicks */
 bool canwizard = FALSE;			/* Will be permitted to do this */
 bool s_know[MAXSCROLLS];		/* Do you know what a scroll does */
@@ -103,11 +102,15 @@ bool cutcorners = FALSE;
 bool doorstop = TRUE;
 bool door_stop = FALSE;
 #ifdef FLUTTER
+    bool autosave = TRUE;		/* Option to save game automatically */
     bool jump = FALSE;
     bool flutter = TRUE;		/* code built to run as a flutter app */
+    char *autosave_file = "rogue.asave";
 #else
+    bool autosave = FALSE;		/* Option to save game automatically */
     bool jump = TRUE;
     bool flutter = FALSE;		/* code built normally */
+    char *autosave_file = "rogue.asave";
 #endif
 bool slow_invent = FALSE;
 bool firstmove = FALSE;

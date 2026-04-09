@@ -8,6 +8,8 @@
 #include "curses.h"
 #include <ctype.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "rogue.h"
 
 #define	NUM_OPTS	(sizeof optlist / sizeof (OPTION))
@@ -38,6 +40,7 @@ int get_bool(opt_arg *o_opt, WINDOW *win);
 int get_str(opt_arg *o_opt, WINDOW *win);
 int get_abil(opt_arg *o_opt, WINDOW *win);
 int get_mouse(opt_arg *o_opt, WINDOW *win);
+int get_autosave(opt_arg *o_opt, WINDOW *win);
 int get_diff(opt_arg *o_opt, WINDOW *win);
 
 /*
@@ -63,7 +66,7 @@ OPTION	optlist[] = {
     {"autopickup",	"Pick up things you step on (autopickup): ",
 	{&autopickup},	put_bool,	get_bool	},
     {"autosave",	"Save game automatically (autosave): ",
-	{&autosave},	put_bool,	get_bool	},
+	{&autosave},	put_bool,	get_autosave	},
 #ifdef MOUSE
     {"usemouse",	"Use mouse to move (usemouse): ",
 	{&use_mouse},	put_bool,	get_mouse	},
@@ -475,18 +478,17 @@ get_diff(opt_arg *opt, WINDOW *win)
 
 #ifdef MOUSE
 /*
- *
  * Use mouse click for movement?
  */
 int
 get_mouse(opt_arg *opt, WINDOW *win)
 {
     int ret;
-    bool old_mouse = *opt->barg;
+    bool old_value = *opt->barg;
 
     ret = get_bool(opt, win);
 
-    if (*opt->barg != old_mouse) {
+    if (*opt->barg != old_value) {
 	if (use_mouse) {
 	    mousemask(BUTTON1_RELEASED, NULL);	/* enable KEY_MOUSE */
 	} else {
@@ -497,6 +499,30 @@ get_mouse(opt_arg *opt, WINDOW *win)
     return ret;
 }
 #endif
+
+/*
+ * automatically save on every level?
+ */
+int
+get_autosave(opt_arg *opt, WINDOW *win)
+{
+    int ret;
+    bool old_value = *opt->barg;
+
+    ret = get_bool(opt, win);
+
+    if (*opt->barg != old_value) {
+	if (!autosave) {
+	    char fname[200];
+            strcpy(fname, home);
+            strcat(fname, autosave_file);
+            if (access(fname, F_OK) == 0)
+                unlink(fname);  /* delete old autosave file */
+	}
+    }
+
+    return ret;
+}
 
 /*
  * parse options from string, usually taken from the environment.

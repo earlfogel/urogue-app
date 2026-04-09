@@ -1473,7 +1473,7 @@ restore_file(FILE *savef)
 
     str = ur_read_string(savef);
     if (strcmp(str, file_name) != 0
-	&& strstr(str, "rogue.asave") != NULL)
+	&& strstr(str, autosave_file) != NULL)
 	msg("Restore file: %s", file_name);  /* hmm, it moved */
     /* strcpy(unused_str1,str); */  /* was file_name */
     FREE(str);

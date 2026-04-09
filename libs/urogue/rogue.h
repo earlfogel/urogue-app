@@ -1469,6 +1469,7 @@ int save_resurrect(int bonus);
 /* rogue.c */
 extern int maxprayers;
 extern int maxspells;
+extern char *autosave_file;
 /* rooms.c */
 void do_rooms(void);
 void draw_room(struct room *rp);

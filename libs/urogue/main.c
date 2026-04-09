@@ -159,7 +159,9 @@ main (int argc, char **argv)
     char *restore_file = NULL;
     struct stat sb;
     bool show_welcome = FALSE;
+#ifndef FLUTTER
     char char_file[LINELEN];
+#endif
 
 #ifdef FLUTTER
     sem_init(&mutex, 0, 1);
@@ -213,10 +215,10 @@ main (int argc, char **argv)
 	    else if (getenv("USER")) 
 		strcpy(whoami, getenv("USER"));
     }
-#ifndef FLUTTER
     if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 	restore_file = file_name;
 
+#ifndef FLUTTER
     /* check for a character file */
     strcpy(char_file, home);
     strcat(char_file, ROGDEFS);

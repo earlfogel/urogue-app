@@ -230,7 +230,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	if (ch == '%' && levtype != POSTLEV) {
 	    int x, y;
 	    if (winat(hero.y, hero.x) == STAIRS) {
-		ch = do_mouseclick(dest);
+		ch = do_mouseclick(hero);
 	    } else {
 		for (x = 0; x < COLS; x++) {
 		    for (y = 1; y < LINES - 2; y++) {

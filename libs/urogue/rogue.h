@@ -115,7 +115,7 @@
 #define ce(a, b) ((a).x == (b).x && (a).y == (b).y)
 #ifdef FLUTTER
 void draw(WINDOW *scr);
-void redraw(WINDOW *scr);
+/* void redraw(WINDOW *scr); */
 #else
 #   define draw(window) wrefresh(window)
 #endif

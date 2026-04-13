@@ -399,7 +399,8 @@ fflush(stdout);
      */
 #ifdef FLUTTER
     if (restore_file) {
-	restore_file = NULL;
+	if (stat(restore_file, &sb) != 0 || !S_ISREG(sb.st_mode))
+	    restore_file = NULL;
     }
 #endif
     if (restore_file) {

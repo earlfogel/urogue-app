@@ -69,9 +69,9 @@ flutter:
     - assets/Scroll-o-Sprites.png
 
   fonts:
-    - family: PixelFont
+    - family: RobotoMono-Regular
       fonts:
-        - asset: assets/VT323-Regular.ttf
+        - asset: assets/RobotoMono-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

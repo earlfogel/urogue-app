@@ -20,12 +20,15 @@ class BoardData extends ChangeNotifier {
   bool onStairs = false;
   bool useSprites = true;
   bool hasRip = false;
-  //bool hasDir = false;
+  //bool nearMonst = false;
   bool isDarkTheme = true;
+  bool isFleaMarket = false;
   String oldBuffer = '';
   bool oldUseSprites = false;
   bool oldIsDarkTheme = false;
-  bool orientationChanged = false;
+  String orientation = "unknown";
+  String oldOrientation = "";
+  bool orientationChanged = true;
   var defaultColor = Colors.white;
   Map<String, String> stats = {};
   List<Cell> cells = [];
@@ -151,14 +154,48 @@ class BoardData extends ChangeNotifier {
     }
   }
 
+  /*
+   * Is there a monster in reach?
+   */
+  bool canFight() {
+    int x, y;
+    for (x = player.x - 1; x <= player.x + 1; x++) {
+      for (y = player.y - 1; y <= player.y + 1; y++) {
+	if (x >= 0 && x <= 80 && y >= 1 && y <= 23) {
+	  String c = getCharAt(y, x);
+	  if (isAlpha.hasMatch(c)) {
+	    if (y == player.y || x == player.x) { // not diagonal
+		return(true);
+	    } else { // diagonal
+		String d1 = getCharAt(player.y, x);
+		String d2 = getCharAt(y, player.x);
+		if (!"-| ".contains(d1) && !"-| ".contains(d2))  // can diag
+		    return(true);
+	    }
+	  }
+	}
+      }
+    }
+    return false;
+  }
+
   void parseBuffer(String buf) {
     if (buf == oldBuffer && useSprites == oldUseSprites && isDarkTheme == oldIsDarkTheme
-	&& !orientationChanged)
+	&& orientation == oldOrientation
+	&& !orientationChanged
+	) {
+//print("nothing changed");
 	return;  // nothing changed
-    else {
+    } else {
+//if (buf != oldBuffer) print("buffer changed");
+//if (useSprites != oldUseSprites) print("useSprites changed");
+//if (isDarkTheme != oldIsDarkTheme) print("theme changed");
+//if (orientation != oldOrientation) print("orientation changed");
+//if (orientationChanged) print("O2");
 	oldBuffer = buf;
 	oldUseSprites = useSprites;
 	oldIsDarkTheme = isDarkTheme;
+	oldOrientation = orientation;
 	orientationChanged = false;
     }
 
@@ -168,19 +205,18 @@ class BoardData extends ChangeNotifier {
     // r.i.p.
     hasRip = buffer.contains('PEACE');
 
-    // parse the message
+    // parse the buffer
     message = getLine(0).trim();
     hasMore = buffer.contains('--More--');
     hasStar = message.contains('* for list');
-    //hasDir = buffer.contains('Which direction?');
     if (buffer.contains('Press space')) hasMore = true;
-    //hasStairs = FFIBridge.foundStairs();
     hasStairs = false;
     for (int y = 1; y < 23; y++) {
 	if (getLine(y).contains('%'))
 	    hasStairs = true;
     }
     onStairs = FFIBridge.onStairs();
+    isFleaMarket = buffer.contains('Flea Market');
     hasStats = false;
     stats = {};
 
@@ -215,7 +251,7 @@ class BoardData extends ChangeNotifier {
     }
 
     if (buffer.length >= 2000) {
-      if (!hasRip && useSprites && hasStats) {
+      if (!hasRip && useSprites && hasStats && !isFleaMarket) {
         modifyCornerTiles();
         modifyWeaponTiles();
       }
@@ -276,12 +312,14 @@ class BoardData extends ChangeNotifier {
 		}
 	    }
             cells.add(cell);
-            if (c == '@' || c == '_' || c == '\'') {
-              player = cell;
-            }
+            if (hasStats && (c == '@' || c == '_' || c == '\'')
+		//&& FFIBridge.whichMonst(y, x) == 0
+	    )
+	      player = cell;
           }
         }
       }
+      //nearMonst = canFight();
     }
 
     if (hasRip) {

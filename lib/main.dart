@@ -9,8 +9,11 @@ import 'input.dart';
 import 'sprites.dart';
 import 'ffibridge.dart';
 
-bool lessStats = false;
-bool noStats = false;
+bool narrowScreen = false;
+bool shortScreen = false;
+bool oldShortScreen = false;
+double oldHeight = 0;
+double oldWidth = 0;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,23 +74,33 @@ class GameMap extends StatelessWidget {
     // map
     Size size = SpriteSheet.instance().size;
     //board.useSprites = true;
-    if (!board.useSprites || !board.hasStats) {
+    if (!board.useSprites || !board.hasStats || board.isFleaMarket) {
 	size = Size(12, 16);
 	if (Platform.isAndroid && board.hasStats)
 	    size = Size(14,18);
     }
 
-    // adjust stats for small screens
-    if (board.hasStats) {
+    // adjust for small screens
+    if (board.buffer.length >= 2000) {
       double fontSize = (Platform.isAndroid ? 12 : 20);
       if (screen.width / fontSize > 60)
-	lessStats = false;
+	narrowScreen = false;
       else
-	lessStats = true;
-      if (screen.height / fontSize > 8)
-	noStats = false;
+	narrowScreen = true;
+      if (screen.height / fontSize > 10)
+	shortScreen = false;
       else if (screen.height / fontSize < 6)
-	noStats = true;
+	shortScreen = true;
+//if ((screen.height - oldHeight).abs() > 9)
+//print("height changed from $oldHeight to ${screen.height}");
+//if ((screen.width - oldWidth).abs() > 9)
+//print("width changed from $oldWidth to ${screen.width}");
+if ((screen.height - oldHeight).abs() > 9
+    || (screen.width - oldWidth).abs() > 9) {
+	board.orientationChanged = true;
+	oldHeight = screen.height;
+	oldWidth = screen.width;
+      }
     }
 
     Offset playerXY =
@@ -131,13 +144,31 @@ class GameMap extends StatelessWidget {
         Offset(screen.width / 2 - playerXY.dx, screen.height / 2 - playerXY.dy);
 
     List<Widget> map = [];
-    for (final c in board.cells) {
+    if (board.hasStats && !board.isFleaMarket) {
+      for (final c in board.cells) {
 	map.add(Positioned(
-          top: center.dy + (size.height * (c.y - 2)),
-          left: center.dx + (size.width * c.x),
-          child: (board.hasStats && board.useSprites)?
+	  top: center.dy + (size.height * (c.y - 2)),
+	  left: center.dx + (size.width * c.x),
+	  child: (board.useSprites)?
 	    Sprite(cell: c):
 	    Text(c.data, style: TextStyle(fontSize: size.width))));
+      }
+    } else {  // show text instead
+	int start = 0;
+	int end = 25;
+	if (board.isFleaMarket) {
+	  start = 1;
+	  end = 23;
+	}
+	for (int i = start; i < end; i++) {
+	  map.add(Positioned(
+	    top: center.dy + (size.height * (i - 2)),
+	    left: center.dx,
+	    child: 
+	      Text(board.getLine(i),
+		style: TextStyle(fontSize: size.width,
+		    fontFamily: 'RobotoMono-Regular'))));
+	}
     }
 
     return Stack(children: map);
@@ -179,11 +210,11 @@ class _GameViewState extends State<GameView> {
     List<Widget> stats = [];
     for (final k in board.stats.keys) {
       // adjust stats for narrow screens
-      if ((k == 'Pack' || k == 'Au' || k == 'Exp') && lessStats == true)
+      if ((k == 'Pack' || k == 'Au' || k == 'Exp') && narrowScreen == true)
 	continue;
       String v = board.stats[k] ?? '';
       if (stats.isNotEmpty) {
-        stats.add(Expanded(child: Container()));
+        stats.add(Expanded(child: Container()));  // spacing
       }
       stats.add(Row(children: [
         Text((k != "Player")? '$k: ': '', style: statStyle),
@@ -191,7 +222,7 @@ class _GameViewState extends State<GameView> {
       ]));
     }
 
-    if (board.hasRip || !board.hasStats || noStats) {
+    if (board.hasRip || !board.hasStats || shortScreen) {
       stats = [];
     }
 
@@ -205,13 +236,20 @@ class _GameViewState extends State<GameView> {
       InputTool(icon: Icons.space_bar, title: 'Space', cmd: ' '),
       InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
     ];
-    if (board.onStairs)
-      commands.insert(4,
-	InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%',
-	    color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
-    else if (board.hasStairs)
-      commands.insert(4,
-	InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%'));
+
+    if (board.hasStats) {
+      if (board.onStairs)
+	commands.insert(4,
+	  InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%',
+	      color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
+      else if (board.hasStairs)
+	commands.insert(4,
+	  InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%'));
+
+//      if (board.nearMonst)
+//	commands.insert(4,
+//	  InputTool(icon: Icons.shield_outlined, title: 'Fight', cmd: 'F'));
+    }
 
     if (board.hasRip) {
       commands = [
@@ -227,15 +265,24 @@ class _GameViewState extends State<GameView> {
     TextStyle messageStyle = const TextStyle(
         fontSize: 18, fontStyle: FontStyle.italic);
 
+    if (shortScreen != oldShortScreen) {
+      oldShortScreen == shortScreen;
+      Future.delayed(const Duration(milliseconds: 100), _updateScreen);
+    }
+
     return Scaffold(
         body: OrientationBuilder(
         builder: (context, orientation) {
 	    //board.orientationChanged = true;
-	    Future.delayed(const Duration(milliseconds: 50), _updateScreen);
+	    if (orientation == Orientation.portrait)
+		board.orientation = "portrait";
+	    else
+		board.orientation = "landscape";
+	    Future.delayed(const Duration(milliseconds: 100), _updateScreen);
 	    return SafeArea(
 	    child: InputListener(
       toolbar: commands,
-      showToolbar: true,
+      showToolbar: shortScreen? false: true,
       child: Column(children: [
         // stats
 	Row(children: stats),

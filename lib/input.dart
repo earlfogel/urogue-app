@@ -99,38 +99,33 @@ class _InputListener extends State<InputListener> {
   bool hasMonst(String cmd) {
     BoardData board = Provider.of<BoardData>(context, listen: false);
     final pattern = RegExp("[a-zA-Z]");
-    var pos;
     String c;
+    int x = board.player.x;
+    int y = board.player.y;
     if (board.hasMore)
 	return false;
     if ("hjkl".contains(cmd)) { // check direction of travel
 	if (cmd == 'h')
-	  pos = board.player.y * 80 + board.player.x - 1;
+	  c = board.getCharAt(y, x - 1);
 	else if (cmd == 'j')
-	  pos = board.player.y * 80 + board.player.x + 80;
+	  c = board.getCharAt(y + 1, x);
 	else if (cmd == 'k')
-	  pos = board.player.y * 80 + board.player.x - 80;
-	else if (cmd == 'l')
-	  pos = board.player.y * 80 + board.player.x + 1;
-
-	c = board.buffer[pos];
+	  c = board.getCharAt(y - 1, x);
+	else
+	  c = board.getCharAt(y, x + 1);
 	if (pattern.hasMatch(c))
 	  return true;
     } else {  // check all directions
-	pos = board.player.y * 80 + board.player.x - 1;
-	c = board.buffer[pos];
+	c = board.getCharAt(y, x - 1);  // h
 	if (pattern.hasMatch(c))
 	  return true;
-	  pos = board.player.y * 80 + board.player.x + 80;
-	c = board.buffer[pos];
+	c = board.getCharAt(y + 1, x);  // j
 	if (pattern.hasMatch(c))
 	  return true;
-	  pos = board.player.y * 80 + board.player.x - 80;
-	c = board.buffer[pos];
+	c = board.getCharAt(y - 1, x);  // k
 	if (pattern.hasMatch(c))
 	  return true;
-	  pos = board.player.y * 80 + board.player.x + 1;
-	c = board.buffer[pos];
+	c = board.getCharAt(y, x + 1);  // l
 	if (pattern.hasMatch(c))
 	  return true;
     }
@@ -190,7 +185,7 @@ class _InputListener extends State<InputListener> {
                   child: widget.child,
 		  )),
 
-          if (Platform.isAndroid || widget.showToolbar) ...[
+          if (/* Platform.isAndroid || */ widget.showToolbar) ...[
             SingleChildScrollView(
           controller: hscroller,
           scrollDirection: Axis.horizontal,

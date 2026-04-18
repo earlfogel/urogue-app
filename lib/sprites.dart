@@ -101,6 +101,7 @@ class SpriteSheet {
 
   void initialize() async {
 
+    tilesetMap[' '] = 1383; // oops
     tilesetMap['.'] = 525; // floor
     tilesetMap['#'] = 526; // floor path
     tilesetMap['-'] = 562; //522; // wall
@@ -235,6 +236,7 @@ class SpriteSheet {
     monstTile[101] = 293; // psuedo-dragon
     monstTile[107] = 290; // lion
     monstTile[109] = 462; // ochre jelly
+    monstTile[110] = 346; // phoenix
     monstTile[113] = 288; // slithering tracker
     monstTile[119] = 292; // subterranean lizard
     monstTile[121] = 293; // plateosaurus

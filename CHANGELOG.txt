@@ -40,6 +40,16 @@
 - replace two up/down icons with one Stairs icon, which
   appears when you find the stairs on a level and turns green
   when you step on it.
+- more efficient getLine and getCol routines
 - use semaphores to stop flutter from reading curses windows
-  while urogue is writing them (as reading changes the cursor position
-  and causes display glitches)
+  while urogue is writing them. Also have urogue always draw windows
+  from the top left, otherwise flutter reading can move the cursor 
+  and cause subsequent display glitches)
+- switch to a nicer font for text screens and display them more efficently
+- hide stats and icons when keyboard doesn't leave space for everything
+- fix display of corner tiles when a monster is on an adjacent door
+- show trading posts as text to workaround display issues
+- fix: redraw screen when orientation changes (landscape vs portrait)
+- code cleanup in input.dart
+- code cleanup in state.c
+- set PDC_ROWS=25 in pdc_impl.c (fixes save file bug and more efficient)

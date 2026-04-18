@@ -235,6 +235,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    if (winat(hero.y, hero.x) == STAIRS) {
 		ch = do_mouseclick(hero);
 	    } else {
+		dest.x = dest.y = 0;
 		for (x = 0; x < COLS; x++) {
 		    for (y = 1; y < LINES - 2; y++) {
 			if (mvwinch(cw, y, x) == STAIRS) {
@@ -244,6 +245,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			}
 		    }
 		}
+		if (dest.x <= 0 && dest.y <= 0)  /* stairs not visible */
+		    ch = ' ';
 	    }
 	}
 
@@ -1157,8 +1160,6 @@ d_level ()
     level++;
     new_level(NORMLEV);
     if (no_phase) unphase(NULL);
-    dest.x = dest.y = 0;
-    prev.x = prev.y = 0;
 }
 
 /*
@@ -1188,8 +1189,6 @@ u_level ()
 	    extinguish_fuse(FUSE_UNPHASE);
 	    unphase(NULL);
 	}
-	dest.x = dest.y = 0;
-	prev.x = prev.y = 0;
 	return;
     }
     else if (ch != STAIRS && 

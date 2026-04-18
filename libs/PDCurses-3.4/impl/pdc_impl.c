@@ -71,7 +71,7 @@ chtype acs_map[128] =
 
 int ESCDELAY = 0;
 unsigned long pdc_key_modifiers = 0;
-#define PDC_rows 40
+#define PDC_rows 25
 #define PDC_cols 80
 
 int pdc_last_key = -1;

@@ -61,6 +61,45 @@ draw(WINDOW *win)
     sem_post(&mutex);
 }
 
+/*
+ * repair current screen, when stuff is drawn in the wrong place
+ * use ^R or 'X' command to trigger.
+ */
+#if 0
+void
+redraw(WINDOW *win)
+{
+    int x, y;
+    char ch, ch2;
+
+    if (win != cw)
+	return;
+
+    for (x=0; x<COLS; x++) {
+	for (y=1; y<LINES - 2; y++) {
+	    ch = mvwinch(cw, y, x);
+	    if (isalpha(ch)) {
+		if (mvwinch(mw, y, x) == ' ')
+		    mvwaddch(cw, y, x, ' ');	/* clear */
+	    } else if (strchr(",*!?:)]=/", ch) != NULL) {
+		ch2 = which_thing(y, x);
+		if (ch2 == -1)
+		    mvwaddch(cw, y, x, ' ');	/* clear */
+		else if (ch2 != ch)
+		    mvwaddch(cw, y, x, ch2);	/* reset */
+	    } else if (ch == '&') {
+		ch2 = secretdoor(y, x);
+		mvwaddch(cw, y, x, ch2);	/* reset */
+	    } else if (ch != ' ') {
+		ch2 = mvwinch(stdscr, y, x);
+		if (ch2 != ch)
+		    mvwaddch(cw, y, x, ch2);	/* reset */
+	    }
+	}
+    }
+}
+#endif
+
 int rogue_running;
 
 int is_rogue_running()
@@ -346,12 +385,10 @@ if (rogue_running) {
     initscr();				/* Start up cursor package */
 
 /*
- * needed for flutter
+ * no longer needed for flutter
  */
-#ifdef FLUTTER
-LINES=25; COLS=80;
-#endif
 #if 0
+LINES=25; COLS=80;  /* see PDCurses-3.4/impl/pdc_impl.c */
 printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
 printf("PDC_LINES=%s PDC_COLS=%s\n", getenv("PDC_LINES"), getenv("PDC_COLS"));
 fflush(stdout);
@@ -404,8 +441,11 @@ fflush(stdout);
     }
 #endif
     if (restore_file) {
-	if (!restore(restore_file)) /* Note: restore returns on error only */
+	if (!restore(restore_file)) { /* Note: restore returns on error only */
+	    if (flutter)
+		unlink(restore_file);  /* delete bad autosave file */
 	    exit(1);
+	}
     }
 
 #ifndef FLUTTER

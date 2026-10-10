@@ -244,11 +244,14 @@ class _GameViewState extends State<GameView> {
 	      color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
       else if (board.hasStairs)
 	commands.insert(4,
-	  InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%'));
+	  InputTool(icon: Icons.stairs_outlined, title: 'To stairs', cmd: '%'));
 
 //      if (board.nearMonst)
 //	commands.insert(4,
 //	  InputTool(icon: Icons.shield_outlined, title: 'Fight', cmd: 'F'));
+
+//      commands.add(
+//	InputTool(image: AssetImage("assets/player.png"), title: 'Inventory', cmd: 'i'));
     }
 
     if (board.hasRip) {
@@ -324,7 +327,7 @@ class _GameViewState extends State<GameView> {
 	    else if (k == LogicalKeyboardKey.digit4.keyId)
 		key = '\$';
 	    else if (k == LogicalKeyboardKey.digit5.keyId)
-		key = '%';
+		key = '\%';
 	    else if (k == LogicalKeyboardKey.digit6.keyId)
 		key = '^';
 	    else if (k == LogicalKeyboardKey.digit7.keyId)
@@ -335,6 +338,14 @@ class _GameViewState extends State<GameView> {
 		key = '(';
 	    else if (k == LogicalKeyboardKey.digit0.keyId)
 		key = ')';
+	    else if (k == LogicalKeyboardKey.backquote.keyId)
+		key = '~';
+	    else if (k == LogicalKeyboardKey.comma.keyId)
+		key = '<';
+	    else if (k == LogicalKeyboardKey.period.keyId)
+		key = '>';
+	    else if (k == LogicalKeyboardKey.slash.keyId)
+		key = '?';
 	}
 
         String s = key;

@@ -19,12 +19,14 @@ class CustomEditingController extends TextEditingController {
 class InputTool {
   InputTool(
       {IconData? this.icon,
+      ImageProvider? this.image = null,
       String this.title = '',
       String this.cmd = '',
       Color this.color = Colors.white,
       Function? this.onPressed});
 
   IconData? icon;
+  ImageProvider? image = null;
   String title = '';
   String cmd = '';
   Color color = Colors.white;
@@ -208,15 +210,26 @@ class _InputListener extends State<InputListener> {
 		    // use IconButton for onPressed events
 		    // and Gesture detector for the rest
 		    child: IconButton(
-                    icon: Icon(t.icon, size: iconSize, color: t.color),
+                    icon: (t.image != null)
+		    ? ImageIcon(t.image!, size: iconSize, color: t.color)
+		    : Icon(t.icon, size: iconSize, color: t.color),
 		    //tooltip: t.title,
                     onPressed: () {
 		      if (t.cmd.length > 0) {
 			if (board.hasMore)
 			  widget.onKeyDown?.call(' ');
-			else if ("hjkl".contains(t.cmd) && board.hasStar)
-			  widget.onKeyDown?.call('*');
-			else if (t.cmd == '.')
+			else if ("hjkl".contains(t.cmd)) {
+			  if (board.hasStar)
+			      widget.onKeyDown?.call('*');
+			  else if (t.cmd == 'h')
+			      widget.onKeyDown?.call('Arrow Left');
+			  else if (t.cmd == 'j')
+			      widget.onKeyDown?.call('Arrow Down');
+			  else if (t.cmd == 'k')
+			      widget.onKeyDown?.call('Arrow Up');
+			  else if (t.cmd == 'l')
+			      widget.onKeyDown?.call('Arrow Right');
+			} else if (t.cmd == '.')
 			  widget.onKeyDown?.call('s');  // search instead
 			else
 			  widget.onKeyDown?.call(t.cmd);

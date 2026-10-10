@@ -358,7 +358,7 @@ void
 picky_inven ()
 {
     struct linked_list *item;
-    char ch, mch;
+    char mch;
 
     if (pack == NULL)
 	msg("You aren't carrying anything.");
@@ -373,7 +373,7 @@ picky_inven ()
 	    msg("");
 	    return;
 	}
-	for (ch = 'a', item = pack; item != NULL; item = next(item), ch++)
+	for (item = pack; item != NULL; item = next(item))
 	    if (item->l_letter == mch)
 	    {
 		msg("%c) %s",item->l_letter,inv_name((struct object *) ldata(item), FALSE));
@@ -393,7 +393,7 @@ get_item (char *purpose, int type)
 {
     struct linked_list *obj, *pit, *savepit=NULL;
     struct object *pob;
-    char ch, och, anr;
+    char ch, anr;
     int cnt, itemcount = 0;
 
     if (pack == NULL)
@@ -481,7 +481,7 @@ get_item (char *purpose, int type)
 		}
 		/* ch has item to get from pack */
 	    }
-	    for(obj = pack,och = 'a'; obj != NULL;obj = next(obj),och++)
+	    for(obj = pack; obj != NULL; obj = next(obj))
 		if (ch == obj->l_letter)
 		    break;
 	    if (obj == NULL) {
@@ -512,14 +512,11 @@ int
 pack_char (struct object *obj)
 {
     struct linked_list *item;
-    char c;
 
-    c = 'a';
     for (item = pack; item != NULL; item = next(item))
 	if ((struct object *) ldata(item) == obj)
 	    return item->l_letter;
-	else
-	    c++;
+
     msg("Help!  Item in pack not in pack!");
     return 0;
 }

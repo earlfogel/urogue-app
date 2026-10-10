@@ -1060,6 +1060,8 @@ extern bool game_over;			/* Is this the end? */
 extern bool serious_fight;		/* fight longer and harder */
 extern bool mousemove;
 extern bool flutter;			/* code built to run as a flutter app */
+extern bool newcount;			/* start a series of repeated commands */
+extern bool counting;			/* a series of repeated commands */
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */
 extern char *spacemsg;

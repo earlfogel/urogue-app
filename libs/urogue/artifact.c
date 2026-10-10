@@ -1678,7 +1678,7 @@ get_bag (struct linked_list **bag)
 {
     struct linked_list *obj, *pit;
     struct object *pob;
-    char ch, och, anr;
+    char ch, anr;
     int cnt;
 
     if (*bag == NULL) {
@@ -1725,7 +1725,7 @@ get_bag (struct linked_list **bag)
 		return NULL;	/* all done if abort */
 	    }
 	}
-	for(obj = *bag,och = 'a'; obj != NULL;obj = next(obj),och++)
+	for(obj = *bag; obj != NULL;obj = next(obj))
 	    if (ch == obj->l_letter)
 		break;
 	if (obj == NULL) {
@@ -1745,12 +1745,11 @@ void
 bag_inventory (struct linked_list *list)
 {
     struct object *obj;
-    char ch;
     int n_objs;
     char inv_temp[LINELEN];
 
     n_objs = 0;
-    for (ch = 'a'; list != NULL; ch++, list = next(list)) {
+    while (list != NULL) {
 	obj = (struct object *) ldata(list);
 	switch (n_objs++) {
 	    case 0:
@@ -1766,6 +1765,7 @@ bag_inventory (struct linked_list *list)
 	    default:
 		wprintw(hw, "%c) %s\n", list->l_letter, inv_name(obj, FALSE));
 	}
+	list = next(list);
     }
     if (n_objs == 0) {
 	msg("Your bag is empty." );
@@ -1786,14 +1786,11 @@ int
 bag_char (struct object *obj, struct linked_list *bag)
 {
     struct linked_list *item;
-    char c;
 
-    c = 'a';
     for (item = bag; item != NULL; item = next(item))
 	if ((struct object *) ldata(item) == obj)
 	    return item->l_letter;
-	else
-	    c++;
+
     msg("Help! Item not in bag!");
     return '?';
 }

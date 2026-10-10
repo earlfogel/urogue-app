@@ -121,6 +121,8 @@ bool monst_dead = FALSE;
 bool game_over = FALSE;
 bool serious_fight = FALSE;
 bool mousemove = FALSE;
+bool newcount = FALSE;			/* start a series of repeated commands */
+bool counting = FALSE;			/* a series of repeated commands */
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */
 
@@ -464,6 +466,7 @@ struct h_list helpstr[] = {
 	{'Q',	"	quit"},
 	{'=',	"	listen for monsters"},
 	{'~',	"	points needed to raise levels"},
+	{'%',	"	run to (or use) stairs"},
 	{'f',	"	fight monster"},
 	{'F',	"	fight monsters"},
 	{CTRL('F'),	"	fight all monsters"},

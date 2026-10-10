@@ -235,7 +235,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    if (winat(hero.y, hero.x) == STAIRS) {
 		ch = do_mouseclick(hero);
 	    } else {
-		dest.x = dest.y = 0;
 		for (x = 0; x < COLS; x++) {
 		    for (y = 1; y < LINES - 2; y++) {
 			if (mvwinch(cw, y, x) == STAIRS) {
@@ -245,8 +244,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			}
 		    }
 		}
-		if (dest.x <= 0 && dest.y <= 0)  /* stairs not visible */
-		    ch = ' ';
 	    }
 	}
 
@@ -280,6 +277,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			break;
 		    default:
 			count = 0;
+		}
+		if (count > 0) {
+		    newcount = TRUE;
+		    counting = TRUE;
 		}
 	    }
 
@@ -472,12 +473,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		when 'v' : after = FALSE;
 			   msg("UltraRogue version %s.",
 				release);
-		when CTRL('R') :
-#ifdef FLUTTER
-		case 'X':
-#endif
-		    after = FALSE;
 #ifdef EARL
+		when 'X':
+		    after = FALSE;
 		    char fname[200];
 		    strcpy(fname, home);
 		    strcat(fname, autosave_file);
@@ -486,9 +484,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			draw(cw);
 			if (readchar() == 'y')
 			    death(D_MISADVENTURE);	/* restart level? */
-			msg("");
+			/* msg(""); */
 		    }
 #endif
+		when CTRL('R') :
 #if 0
 		    redraw(cw);
 #endif
@@ -503,9 +502,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    draw(cw);
 		    touchwin(cw); /* MMMMMMMMMM */
 		when CTRL('P') :
-#ifdef FLUTTER
 		case '-':
-#endif
 		{
 			    bool decrement = FALSE;
 
@@ -875,6 +872,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    }
 	}
     }
+    newcount = FALSE;
+    if (count == 0)
+	counting = FALSE;
+
 #ifdef EARL
     if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
 	static bool doctor_just_died = TRUE;

@@ -535,6 +535,10 @@ get_dir ()
 {
     int ch;
 
+    if (counting && !newcount) {
+	return TRUE;	/* same direction as last time */
+    }
+
     msg("Which direction? ");
     ch = readchar();
     ch = unarrow(ch);  /* translate arrow keys */

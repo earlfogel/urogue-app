@@ -1355,7 +1355,7 @@ save_throw(int which, struct thing *tp)
     need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus - armor_bonus;
 
     /* the deeper you go, the harder it gets */
-    if (tp == &player && difficulty > 2) {
+    if (tp == &player && difficulty >= 2) {
 	if (level > 20)
 	    need += level / 20;
 	else

@@ -190,11 +190,7 @@ death (int monst)
 
 		if (restore_file(infd) == TRUE) {
 		    nlives++;
-#ifdef EARL
 		    msg("Restarting level %d... (life %d)", level, nlives);
-#else
-		    msg("Restarting level %d...", level);
-#endif
 		    light(&hero);
 		    draw(cw);
 		    fclose(infd);
@@ -518,8 +514,9 @@ score (long amount, int flags, int monst)
 		printf(" %s", killer);
 	    }
 
-	    if (scp->sc_lives > 1)
-		printf(" using %d lives", scp->sc_lives);
+	    if (flags == WINNER || flags == TOTAL)
+		if (scp->sc_lives > 1)
+		    printf(" using %d lives", scp->sc_lives);
 
 	    if (canwizard)
 		printf(" (game #%d)", scp->sc_game_id);

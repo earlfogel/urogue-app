@@ -148,7 +148,7 @@ inv_name (struct object *obj, bool drop)
 
     /* Is it time to reveal blessed/cursed status? */
     if (game_over && (obj->o_type == FOOD
-	    || (obj->o_type == ARTIFACT && wizard)
+	    || obj->o_type == ARTIFACT
 	    || (obj->o_type == RING && (obj->o_ac != 11 || wizard)) )) {
 	if (obj->o_flags & ISCURSED)
 	    strcat(prbuf, " (cursed)");

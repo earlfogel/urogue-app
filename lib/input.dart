@@ -62,6 +62,7 @@ class _InputListener extends State<InputListener> {
   late FocusNode textFocusNode;
   late TextEditingController controller;
   late ScrollController hscroller;
+  final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
 
   bool showKeyboard = false;
   Offset lastTap = const Offset(0, 0);
@@ -93,6 +94,7 @@ class _InputListener extends State<InputListener> {
     textFocusNode.dispose();
     controller.dispose();
     hscroller.dispose();
+    _buttonFocusNode.dispose();
   }
 
   /*
@@ -266,8 +268,64 @@ class _InputListener extends State<InputListener> {
                       _isPressed = false;
                     },
 		  )
-                  ))
-            ]))
+                  )),
+
+	      // menu button
+	      MenuAnchor(
+	      childFocusNode: _buttonFocusNode,
+	      menuChildren: <Widget>[
+		SubmenuButton(
+		  child: const Text("Equipment"),
+		  menuChildren: <Widget>[
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('i');},
+		    child: const Text('Inventory')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('e');},
+		    child: const Text('Eat food')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('q');},
+		    child: const Text('Quaff potion')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('r');},
+		    child: const Text('Read scroll')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('z');},
+		    child: const Text('Zap wand')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call(','); },
+		    child: const Text('Pick up item')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('d'); },
+		    child: const Text('Drop item')),
+//		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('D'); },
+//		    child: const Text('Dip item in a pool')),
+		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('t'); },
+		    child: const Text('Throw something')),
+		],
+		),
+		MenuItemButton(onPressed: () { widget.onKeyDown?.call('F');},
+		  child: const Text('Fight')),
+		MenuItemButton(onPressed: () { widget.onKeyDown?.call('c'); },
+		  child: const Text('Cast a spell')),
+		MenuItemButton(onPressed: () { widget.onKeyDown?.call('p'); },
+		  child: const Text('Pray')),
+		MenuItemButton(onPressed: () { widget.onKeyDown?.call('s'); },
+		  child: const Text('Search')),
+		MenuItemButton(onPressed: () { widget.onKeyDown?.call('!');},
+		  child: const Text('Text/Graphics')),
+		MenuItemButton(onPressed: () { widget.onKeyDown?.call('?');},
+		  child: const Text('Help')),
+	      ],
+	      builder: (_, MenuController controller, Widget? child) {
+		return IconButton(
+		  focusNode: _buttonFocusNode,
+		  onPressed: () {
+		    if (controller.isOpen) {
+		      controller.close();
+		    } else {
+		      controller.open();
+		    }
+		  },
+		  icon: const Icon(Icons.more_vert),
+		);
+	      },
+	    ),
+            ])),
+
           ], // toolbar
 
           Container(

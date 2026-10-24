@@ -233,11 +233,19 @@ class _GameViewState extends State<GameView> {
       InputTool(icon: Icons.arrow_upward, title: 'Up', cmd: 'k'),
       InputTool(icon: Icons.arrow_forward, title: 'Right', cmd: 'l'),
       InputTool(icon: Icons.update, title: 'Rest', cmd: '.'),
-      InputTool(icon: Icons.space_bar, title: 'Space', cmd: ' '),
       InputTool(icon: Icons.cancel_outlined, title: 'Escape', cmd: '\x1b'),
     ];
 
-    if (board.hasStats) {
+    if (board.hasMore) {
+	commands.insert(4,
+	  InputTool(icon: Icons.space_bar, title: 'Space', cmd: '%',
+	      color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
+    } else if (board.hasStar) {
+	commands.insert(4,
+	  InputTool(icon: Icons.asterisk, title: '* for more', cmd: '*',
+	      color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
+*/
+    } else if (board.hasStats) {
       if (board.onStairs)
 	commands.insert(4,
 	  InputTool(icon: Icons.stairs_outlined, title: 'Use stairs', cmd: '%',

@@ -20,7 +20,7 @@ class BoardData extends ChangeNotifier {
   bool onStairs = false;
   bool useSprites = true;
   bool hasRip = false;
-  //bool nearMonst = false;
+  bool nearMonst = false;
   bool isDarkTheme = true;
   bool isFleaMarket = false;
   String oldBuffer = '';
@@ -32,6 +32,8 @@ class BoardData extends ChangeNotifier {
   var defaultColor = Colors.white;
   Map<String, String> stats = {};
   List<Cell> cells = [];
+  bool canCast = false;
+  bool canPray = false;
   final isAlpha = RegExp("[a-zA-Z]");
 
   Cell player = Cell();
@@ -220,7 +222,7 @@ class BoardData extends ChangeNotifier {
     hasStats = false;
     stats = {};
 
-    // parse status > Level: 1  Gold: 0      Hp: 12(12)  Str: 16(16)  Arm: 4   Exp: 1/0
+    // parse status > Level: 1  Gold: 0      Hp: 10/12  Str: 16/16  Arm: 4   Exp: 1/0
     String status = getLine(23) + " " + getLine(24);
     RegExp regExp = RegExp(
     //r"(([a-zA-Z]{0,9}):\s{0,8}([0-9()/]{0,9}))",
@@ -234,8 +236,16 @@ class BoardData extends ChangeNotifier {
       if (g.length == 2) {
 	RegExp statpat = RegExp(r'^([0-9]+)/([0-9]+)$');
 	var match = statpat.firstMatch(g[1] ?? '-');
-	if (match != null && match![1] == match![2])	// e.g. Hp: 18/18
-	  g[1] = match[1] ?? ' ';		// becomes Hp: 18
+	if (match != null) {
+	  int cur = int.parse(match.group(1) as String);
+	  int max = int.parse(match.group(2) as String);
+	  if (cur >= max)
+	    g[1] = match[1] ?? ' ';		// becomes Hp: 18
+	  if (m.group(2) == 'Int' && cur >= 16)
+	    canCast = true;
+	  if (m.group(2) == 'Wis' && cur >= 17)
+	    canPray = true;
+	}
         stats[g[0] ?? '-'] = g[1] ?? '';
       }
       hasStats = true;
@@ -319,7 +329,7 @@ class BoardData extends ChangeNotifier {
           }
         }
       }
-      //nearMonst = canFight();
+      nearMonst = canFight();
     }
 
     if (hasRip) {

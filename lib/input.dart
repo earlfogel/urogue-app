@@ -177,6 +177,54 @@ class _InputListener extends State<InputListener> {
   Widget build(BuildContext context) {
     BoardData board = Provider.of<BoardData>(context, listen: false);
     double iconSize = 28.0;
+    List<Widget> equipment_menu = [
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('i');},
+	  child: const Text('Inventory')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('e');},
+	  child: const Text('Eat food')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('q');},
+	  child: const Text('Quaff potion')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('r');},
+	  child: const Text('Read scroll')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('z');},
+	  child: const Text('Zap wand')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call(','); },
+	  child: const Text('Pick up item')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('d'); },
+	  child: const Text('Drop item')),
+//	  MenuItemButton(onPressed: () { widget.onKeyDown?.call('D'); },
+//	    child: const Text('Dip item in a pool')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('t'); },
+	  child: const Text('Throw something')),
+      ];
+    List<Widget> menu = [
+	SubmenuButton(
+	  child: const Text("Equipment"),
+	  menuChildren: equipment_menu,
+	),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('s'); },
+	  child: const Text('Search')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('!');},
+	  child: const Text('Text/Graphics')),
+	MenuItemButton(onPressed: () { widget.onKeyDown?.call('?');},
+	  child: const Text('Help')),
+      ];
+      if (board.canPray)
+	menu.insert(2,
+	  MenuItemButton(onPressed: () { widget.onKeyDown?.call('p'); },
+	    child: const Text('Pray')),
+	  );
+      if (board.canCast)
+	menu.insert(2,
+	  MenuItemButton(onPressed: () { widget.onKeyDown?.call('c'); },
+	    child: const Text('Cast a spell')),
+	  );
+      if (board.nearMonst)
+	menu.add(
+	    MenuItemButton(onPressed: () { widget.onKeyDown?.call('F');},
+	      child: const Text('Fight')),
+	  );
+
     return Focus(
         onFocusChange: (focused) {
           // if (focused && !textFocusNode.hasFocus) {
@@ -189,7 +237,7 @@ class _InputListener extends State<InputListener> {
                   child: widget.child,
 		  )),
 
-          if (/* Platform.isAndroid || */ widget.showToolbar) ...[
+          if (widget.showToolbar) ...[
             SingleChildScrollView(
           controller: hscroller,
           scrollDirection: Axis.horizontal,
@@ -273,43 +321,7 @@ class _InputListener extends State<InputListener> {
 	      // menu button
 	      MenuAnchor(
 	      childFocusNode: _buttonFocusNode,
-	      menuChildren: <Widget>[
-		SubmenuButton(
-		  child: const Text("Equipment"),
-		  menuChildren: <Widget>[
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('i');},
-		    child: const Text('Inventory')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('e');},
-		    child: const Text('Eat food')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('q');},
-		    child: const Text('Quaff potion')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('r');},
-		    child: const Text('Read scroll')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('z');},
-		    child: const Text('Zap wand')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call(','); },
-		    child: const Text('Pick up item')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('d'); },
-		    child: const Text('Drop item')),
-//		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('D'); },
-//		    child: const Text('Dip item in a pool')),
-		  MenuItemButton(onPressed: () { widget.onKeyDown?.call('t'); },
-		    child: const Text('Throw something')),
-		],
-		),
-		MenuItemButton(onPressed: () { widget.onKeyDown?.call('F');},
-		  child: const Text('Fight')),
-		MenuItemButton(onPressed: () { widget.onKeyDown?.call('c'); },
-		  child: const Text('Cast a spell')),
-		MenuItemButton(onPressed: () { widget.onKeyDown?.call('p'); },
-		  child: const Text('Pray')),
-		MenuItemButton(onPressed: () { widget.onKeyDown?.call('s'); },
-		  child: const Text('Search')),
-		MenuItemButton(onPressed: () { widget.onKeyDown?.call('!');},
-		  child: const Text('Text/Graphics')),
-		MenuItemButton(onPressed: () { widget.onKeyDown?.call('?');},
-		  child: const Text('Help')),
-	      ],
+	      menuChildren: menu,
 	      builder: (_, MenuController controller, Widget? child) {
 		return IconButton(
 		  focusNode: _buttonFocusNode,

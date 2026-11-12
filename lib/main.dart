@@ -240,6 +240,7 @@ class _GameViewState extends State<GameView> {
 	commands.insert(4,
 	  InputTool(icon: Icons.space_bar, title: 'Space', cmd: '%',
 	      color: Color.fromRGBO(0x50, 0xff, 0x55, 1)));
+/*
     } else if (board.hasStar) {
 	commands.insert(4,
 	  InputTool(icon: Icons.asterisk, title: '* for more', cmd: '*',
